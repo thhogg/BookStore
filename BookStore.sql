@@ -125,19 +125,6 @@ CREATE TABLE OrderDetail (
 GO
 
 -- =========================================
---  ĐÁNH GIÁ SÁCH (REVIEW)
--- =========================================
-CREATE TABLE Review (
-    ReviewID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT FOREIGN KEY REFERENCES Users(UserID),
-    BookID INT FOREIGN KEY REFERENCES Book(BookID),
-    Rating INT CHECK (Rating BETWEEN 1 AND 5),
-    Comment NVARCHAR(500),
-    CreatedAt DATETIME DEFAULT GETDATE()
-);
-GO
-
--- =========================================
 --  THANH TOÁN (PAYMENT)
 -- =========================================
 CREATE TABLE Payment (
@@ -243,16 +230,6 @@ VALUES
 (1, 1, 2, 85000),
 (1, 3, 1, 150000),
 (2, 5, 1, 300000);
-GO
-
--- =========================================
--- DỮ LIỆU MẪU CHO REVIEW
--- =========================================
-INSERT INTO Review (UserID, BookID, Rating, Comment)
-VALUES
-(2, 1, 5, N'Sách rất hay, cảm động!'),
-(3, 5, 4, N'Rất hữu ích cho lập trình viên.'),
-(4, 3, 5, N'Sách khoa học dễ hiểu, tuyệt vời!');
 GO
 
 -- =========================================
