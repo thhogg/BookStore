@@ -65,9 +65,10 @@ GO
 -- =========================================
 CREATE TABLE Users (
     UserID INT IDENTITY(1,1) PRIMARY KEY,
+	UserName NVARCHAR(255) NOT NULL,
+	[Password] NVARCHAR(255) NOT NULL,
     FullName NVARCHAR(100) NOT NULL,
-    Email NVARCHAR(100) UNIQUE NOT NULL,
-    Password NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(100) UNIQUE NOT NULL, 
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
     [Role] NVARCHAR(20) DEFAULT 'Customer', -- Admin / Customer
@@ -153,12 +154,12 @@ GO
 -- DỮ LIỆU MẪU CHO CATEGORY
 -- =========================================
 INSERT INTO Category (CategoryName, Description)
-VALUES 
-(N'Tiểu thuyết', N'Sách thuộc thể loại tiểu thuyết'),
-(N'Kinh doanh', N'Sách về kỹ năng và tư duy kinh doanh'),
-(N'Công nghệ', N'Sách lập trình, máy tính, AI'),
-(N'Thiếu nhi', N'Sách cho trẻ em'),
-(N'Khoa học', N'Sách về khám phá và khoa học hiện đại');
+VALUES
+(N'Tiểu thuyết', N'Sách tiểu thuyết, truyện dài'),
+(N'Khoa học', N'Sách khoa học phổ thông, nghiên cứu'),
+(N'Thiếu nhi', N'Sách dành cho trẻ em'),
+(N'Kinh tế', N'Sách kinh tế, quản trị, đầu tư'),
+(N'Công nghệ', N'Sách về CNTT, lập trình, AI');
 GO
 
 -- =========================================
@@ -166,11 +167,11 @@ GO
 -- =========================================
 INSERT INTO Author (AuthorName, Bio, ImageUrl)
 VALUES
-(N'Nguyễn Nhật Ánh', N'Tác giả nổi tiếng với các tác phẩm về tuổi học trò.', 'nguyen-nhat-anh.jpg'),
-(N'Dale Carnegie', N'Tác giả của các sách về giao tiếp và phát triển bản thân.', 'dale-carnegie.jpg'),
-(N'Stephen King', N'Tác giả Mỹ nổi tiếng thể loại kinh dị.', 'stephen-king.jpg'),
-(N'Elon Musk', N'Doanh nhân và kỹ sư công nghệ, chủ đề đổi mới sáng tạo.', 'elon-musk.jpg'),
-(N'J.K. Rowling', N'Tác giả bộ truyện Harry Potter nổi tiếng.', 'jk-rowling.jpg');
+(N'Nguyễn Nhật Ánh', N'Nhà văn nổi tiếng với các tác phẩm thiếu nhi.', 'https://example.com/author/anh.jpg'),
+(N'Arthur Conan Doyle', N'Tác giả của Sherlock Holmes.', 'https://example.com/author/doyle.jpg'),
+(N'Stephen Hawking', N'Nhà vật lý lý thuyết người Anh.', 'https://example.com/author/hawking.jpg'),
+(N'Adam Smith', N'Nhà kinh tế học người Scotland.', 'https://example.com/author/smith.jpg'),
+(N'Robert C. Martin', N'Tác giả của Clean Code và nhiều sách lập trình.', 'https://example.com/author/martin.jpg');
 GO
 
 -- =========================================
@@ -178,10 +179,11 @@ GO
 -- =========================================
 INSERT INTO Publisher (PublisherName, [Address], Phone)
 VALUES
-(N'NXB Trẻ', N'161B Lý Chính Thắng, Q3, TP.HCM', '028-3848-9889'),
-(N'NXB Kim Đồng', N'55 Quang Trung, Hà Nội', '024-3822-7275'),
-(N'NXB Lao Động', N'175 Giảng Võ, Hà Nội', '024-3736-1234'),
-(N'NXB Alpha Books', N'176 Thái Hà, Hà Nội', '024-3514-6823');
+(N'NXB Trẻ', N'161B Lý Chính Thắng, Q3, TP.HCM', '028-39316289'),
+(N'NXB Kim Đồng', N'55 Quang Trung, Q.Hoàn Kiếm, Hà Nội', '024-38253812'),
+(N'Oxford Press', N'Great Clarendon Street, Oxford, UK', '+44-1865-556767'),
+(N'NXB Lao Động', N'175 Giảng Võ, Hà Nội', '024-38463549'),
+(N'Pearson Education', N'221 River Street, Hoboken, NJ, USA', '+1-201-236-7000');
 GO
 
 -- =========================================
@@ -189,22 +191,22 @@ GO
 -- =========================================
 INSERT INTO Book (Title, AuthorID, PublisherID, CategoryID, ISBN, Price, Stock, [Description], ImageUrl)
 VALUES
-(N'Mắt biếc', 1, 1, 1, '9786042101234', 95000, 30, N'Câu chuyện tình buồn của Ngạn và Hà Lan.', 'mat-biec.jpg'),
-(N'Đắc nhân tâm', 2, 4, 2, '9786047751231', 120000, 50, N'Sách kinh điển về nghệ thuật giao tiếp.', 'dac-nhan-tam.jpg'),
-(N'IT - Gã hề ma quái', 3, 3, 1, '9780451169518', 180000, 20, N'Tiểu thuyết kinh dị nổi tiếng của Stephen King.', 'it-ga-he.jpg'),
-(N'Elon Musk: Tesla, SpaceX', 4, 4, 3, '9780062301253', 220000, 15, N'Tiểu sử đầy cảm hứng của Elon Musk.', 'elon-musk.jpg'),
-(N'Harry Potter và Hòn đá Phù thủy', 5, 2, 1, '9780747532743', 150000, 40, N'Tập đầu tiên của bộ truyện Harry Potter.', 'harry-potter1.jpg');
+(N'Mắt Biếc', 1, 1, 1, 'ISBN001', 85000, 50, N'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.', 'https://example.com/book/matbiec.jpg'),
+(N'Sherlock Holmes Toàn Tập', 2, 3, 1, 'ISBN002', 120000, 40, N'Truyện trinh thám cổ điển.', 'https://example.com/book/holmes.jpg'),
+(N'Lược Sử Thời Gian', 3, 3, 2, 'ISBN003', 150000, 25, N'Sách khoa học nổi tiếng của Stephen Hawking.', 'https://example.com/book/time.jpg'),
+(N'Wealth of Nations', 4, 3, 4, 'ISBN004', 200000, 30, N'Tác phẩm kinh điển về kinh tế học.', 'https://example.com/book/wealth.jpg'),
+(N'Clean Code', 5, 5, 5, 'ISBN005', 300000, 15, N'Sách hướng dẫn viết code sạch.', 'https://example.com/book/cleancode.jpg');
 GO
 
 -- =========================================
 -- DỮ LIỆU MẪU CHO USERS
 -- =========================================
-INSERT INTO Users (FullName, Email, Password, Phone, [Address], [Role])
+INSERT INTO Users (UserName, [Password], FullName, Email, Phone, [Address], [Role])
 VALUES
-(N'Admin', 'admin@bookstore.com', 'admin123', '0123456789', N'Hà Nội', 'Admin'),
-(N'Nguyễn Văn A', 'a@gmail.com', '123456', '0987654321', N'Hồ Chí Minh', 'Customer'),
-(N'Lê Thị B', 'b@gmail.com', '123456', '0911222333', N'Đà Nẵng', 'Customer'),
-(N'Trần Văn C', 'c@gmail.com', '123456', '0933444555', N'Cần Thơ', 'Customer');
+('admin', '123456', N'Quản trị viên', 'admin@bookstore.com', '0909000000', N'Hà Nội', 'Admin'),
+('minh123', '123456', N'Nguyễn Văn Minh', 'minh@gmail.com', '0909111222', N'TP.HCM', 'Customer'),
+('linhnguyen', '123456', N'Linh Nguyễn', 'linh@gmail.com', '0909333444', N'Đà Nẵng', 'Customer'),
+('thuyanh', '123456', N'Thúy Anh', 'anh@gmail.com', '0909777888', N'Cần Thơ', 'Customer');
 GO
 
 -- =========================================
@@ -219,9 +221,9 @@ GO
 -- =========================================
 INSERT INTO CartItem (CartID, BookID, Quantity, Price)
 VALUES
-(1, 1, 2, 95000),
-(1, 2, 1, 120000),
-(2, 5, 3, 150000);
+(1, 1, 2, 85000),
+(1, 3, 1, 150000),
+(2, 5, 1, 300000);
 GO
 
 -- =========================================
@@ -229,8 +231,8 @@ GO
 -- =========================================
 INSERT INTO [Order] (UserID, TotalAmount, PaymentMethod, [Status], ShippingAddress)
 VALUES
-(2, 310000, N'COD', N'Completed', N'Hồ Chí Minh'),
-(3, 450000, N'Bank', N'Shipped', N'Đà Nẵng');
+(2, 320000, N'COD', N'Pending', N'TP.HCM'),
+(3, 300000, N'Bank', N'Paid', N'Đà Nẵng');
 GO
 
 -- =========================================
@@ -238,9 +240,9 @@ GO
 -- =========================================
 INSERT INTO OrderDetail (OrderID, BookID, Quantity, UnitPrice)
 VALUES
-(1, 1, 2, 95000),
-(1, 2, 1, 120000),
-(2, 5, 3, 150000);
+(1, 1, 2, 85000),
+(1, 3, 1, 150000),
+(2, 5, 1, 300000);
 GO
 
 -- =========================================
@@ -248,10 +250,9 @@ GO
 -- =========================================
 INSERT INTO Review (UserID, BookID, Rating, Comment)
 VALUES
-(2, 1, 5, N'Câu chuyện rất cảm động.'),
-(2, 2, 4, N'Sách hữu ích, đọc dễ hiểu.'),
-(3, 5, 5, N'Rất thích Harry Potter.'),
-(4, 3, 3, N'Hơi dài nhưng nội dung hấp dẫn.');
+(2, 1, 5, N'Sách rất hay, cảm động!'),
+(3, 5, 4, N'Rất hữu ích cho lập trình viên.'),
+(4, 3, 5, N'Sách khoa học dễ hiểu, tuyệt vời!');
 GO
 
 -- =========================================
@@ -259,6 +260,6 @@ GO
 -- =========================================
 INSERT INTO Payment (OrderID, Amount, PaymentStatus, TransactionCode)
 VALUES
-(1, 310000, N'Paid', 'TXN1001'),
-(2, 450000, N'Paid', 'TXN1002');
+(1, 320000, N'Pending', N'TXN001'),
+(2, 300000, N'Paid', N'TXN002');
 GO
