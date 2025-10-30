@@ -1,0 +1,228 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  display: flex;
+  background: #f9fafb;
+  color: #111827;
+  min-height: 100vh;
+}
+a{
+    text-decoration: none;
+}
+
+/* ===== SIDEBAR BEGIN ===== */
+.sidebar {
+  width: 230px;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  height: 100vh;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.sidebar h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2rem;
+}
+.sidebar ul {
+  list-style: none;
+}
+.sidebar li {
+  margin-bottom: 1rem;
+}
+.sidebar a {
+  text-decoration: none;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+}
+.sidebar a:hover {
+  background: #f3f4f6;
+  color: #2563eb;
+}
+/* ===== SIDEBAR END ===== */
+
+/* ===== HEADER ===== */
+.header {
+  position: fixed;
+  left: 230px;
+  top: 0;
+  right: 0;
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 10;
+}
+.header .search {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  width: 300px;
+}
+.header .search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.9rem;
+  width: 100%;
+  color: #374151;
+}
+.header .icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header .icons i {
+  font-size: 1.2rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+.header .icons i:hover {
+  color: #111827;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-info img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.user-info span {
+  font-weight: 500;
+  color: #111827;
+}
+/* ===== HEADER END ===== */
+
+/* ===== MAIN BEGIN ===== */
+.main {
+  margin-left: 230px;
+  padding: 90px 2rem 2rem;
+  width: calc(100% - 230px);
+}
+
+.breadcrumb {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+.breadcrumb span {
+  color: #9ca3af;
+  margin: 0 5px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1.5rem;
+}
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.add-btn {
+  background: #0ea5e9;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  float: right;
+  text-decoration: none;
+}
+.add-btn:hover {
+  background: #0284c7;
+}
+
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  background: #fff;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+thead {
+  background: #f9fafb;
+  text-align: left;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+th,
+td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+tbody tr:hover {
+  background: #f3f4f6;
+}
+.product-name {
+  font-weight: 600;
+  color: #111827;
+}
+.subtext {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-edit {
+  background: #0284c7;
+}
+.btn-edit:hover {
+  background: #0369a1;
+}
+.btn-delete {
+  background: #dc2626;
+}
+.btn-delete:hover {
+  background: #b91c1c;
+}

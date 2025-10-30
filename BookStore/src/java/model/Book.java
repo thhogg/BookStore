@@ -13,8 +13,8 @@ import java.sql.Date;
 public class Book {
     private int bookID;
     private String title;
-    private int authorID;
-    private int publisherID;
+    private String author;
+    private String publisher;
     private int categoryID;
     private String isbn;
     private int price;
@@ -26,11 +26,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(int bookID, String title, int authorID, int publisherID, int categoryID, String isbn, int price, int stock, String description, String imageUrl, Date createdAt) {
+    public Book(int bookID, String title, String author, String publisher, int categoryID, String isbn, int price, int stock, String description, String imageUrl, Date createdAt) {
         this.bookID = bookID;
         this.title = title;
-        this.authorID = authorID;
-        this.publisherID = publisherID;
+        this.author = author;
+        this.publisher = publisher;
         this.categoryID = categoryID;
         this.isbn = isbn;
         this.price = price;
@@ -56,20 +56,20 @@ public class Book {
         this.title = title;
     }
 
-    public int getAuthorID() {
-        return authorID;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAuthorID(int authorID) {
-        this.authorID = authorID;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public int getPublisherID() {
-        return publisherID;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setPublisherID(int publisherID) {
-        this.publisherID = publisherID;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
     public int getCategoryID() {
@@ -127,7 +127,6 @@ public class Book {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
-    
-    
+
+   
 }
