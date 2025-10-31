@@ -14,7 +14,7 @@
     <body>
         <!-- SIDEBAR BEGIN-->
         <div class="sidebar">
-            <h2>Fashion</h2>
+            <h2>BookStore</h2>
             <ul>
                 <li><a href="dashboard.jsp"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
                 <li><a href="users"><i class="fa-solid fa-users"></i> Users</a></li>

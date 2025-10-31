@@ -27,8 +27,7 @@ import model.Category;
         maxFileSize = 1024 * 1024 * 10, // 10MB - giới hạn 1 file
         maxRequestSize = 1024 * 1024 * 50 // 50MB - giới hạn tổng request
 )
-
-public class AddBook extends HttpServlet {
+public class EditBook extends HttpServlet {
 
     private BookDAO bookDao;
     private CategoryDAO categoryDao;
@@ -44,12 +43,18 @@ public class AddBook extends HttpServlet {
             throws ServletException, IOException {
         List<Category> categories = categoryDao.getAllCategories();
         request.setAttribute("categories", categories);
-        request.getRequestDispatcher("add-book.jsp").forward(request, response);
+
+        String bookIdStr = request.getParameter("bookId");
+        int bookId = Integer.parseInt(bookIdStr);
+        Book book = bookDao.getBookByBookID(bookId);
+        request.setAttribute("book", book);
+        request.getRequestDispatcher("edit-book.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String bookIdStr = request.getParameter("bookId");
         String title = request.getParameter("title");
         String author = request.getParameter("author");
         String publisher = request.getParameter("publisher");
@@ -58,41 +63,54 @@ public class AddBook extends HttpServlet {
         String priceStr = request.getParameter("price");
         String stockStr = request.getParameter("stock");
         String description = request.getParameter("description");
-     
+
+        int bookId = 0;
         int price = 0;
         int stock = 0;
         int categoryId = 0;
+
         try {
+            bookId = Integer.parseInt(bookIdStr);
             price = Integer.parseInt(priceStr);
             stock = Integer.parseInt(stockStr);
             categoryId = Integer.parseInt(categoryIdStr);
         } catch (NumberFormatException e) {
             System.out.println(e);
         }
-              
+
         //Get dir-upload from web.xml
         String uploadDir = request.getServletContext().getInitParameter("dir-upload");
-        
+
         Part imagePart = request.getPart("imageUrl");
         String imageName = null;
         if (imagePart != null && imagePart.getSize() > 0) {
-            
+
             String submittedFileName = imagePart.getSubmittedFileName();
-            
+
             imageName = System.currentTimeMillis() + "_" + submittedFileName;
 
-            String uploadPath = getServletContext().getRealPath("") + uploadDir;          
+            String uploadPath = getServletContext().getRealPath("") + uploadDir;
             File uploads = new File(uploadPath);
             if (!uploads.exists()) {
                 uploads.mkdirs();
             }
 
-            imagePart.write(uploadPath+File.separator+imageName);
+            imagePart.write(uploadPath + File.separator + imageName);
+        }
+      
+        String imageUrl = uploadDir + File.separator + imageName;
+               
+        Book b = bookDao.getBookByBookID(bookId);
+        //delete old image file
+        String oldImagePath = getServletContext().getRealPath("")+b.getImageUrl();
+        File oldImageFile = new File(oldImagePath);
+        if (oldImageFile.exists()) {
+            boolean deleted = oldImageFile.delete();
+            if (!deleted) {
+                System.out.println("Could not delete old image: " + oldImagePath);
+            }
         }
         
-        String imageUrl = uploadDir+File.separator+imageName;
-        
-        Book b = new Book();
         b.setTitle(title);
         b.setAuthor(author);
         b.setPublisher(publisher);
@@ -101,12 +119,18 @@ public class AddBook extends HttpServlet {
         b.setStock(stock);
         b.setIsbn(isbn);
         b.setDescription(description);
-        b.setImageUrl(imageUrl);
-        b.setCreatedAt();
+        if (imageName != null) {
+            b.setImageUrl(imageUrl);   
+        }
+
+        bookDao.updateBook(bookId, b);
+        request.setAttribute("message", "Book updated successfully!");
+
+        List<Category> categories = categoryDao.getAllCategories();
+        request.setAttribute("categories", categories);
+        request.setAttribute("book", b);
         
-        bookDao.insertBook(b);
-        request.setAttribute("message", "Add book successfully!");
-        request.getRequestDispatcher("add-book.jsp").forward(request, response);
+        request.getRequestDispatcher("edit-book.jsp").forward(request, response);
     }
 
 }

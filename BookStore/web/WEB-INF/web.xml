@@ -8,6 +8,10 @@
         <servlet-name>AddBook</servlet-name>
         <servlet-class>controller.admin.AddBook</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditBook</servlet-name>
+        <servlet-class>controller.admin.EditBook</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
         <url-pattern>/admin/books</url-pattern>
@@ -15,5 +19,13 @@
     <servlet-mapping>
         <servlet-name>AddBook</servlet-name>
         <url-pattern>/admin/add</url-pattern>
+    </servlet-mapping>
+    <context-param>
+        <param-name>dir-upload</param-name>
+        <param-value>uploads</param-value>
+    </context-param>
+    <servlet-mapping>
+        <servlet-name>EditBook</servlet-name>
+        <url-pattern>/admin/editbook</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -57,7 +57,7 @@
                             </td>
                             <td>${b.stock}</td>
                             <td>
-                                <a href="edit?bookId=${b.bookID}" class="btn btn-edit">
+                                <a href="editbook?bookId=${b.bookID}" class="btn btn-edit">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
                                 <a href="#" class="btn btn-delete">

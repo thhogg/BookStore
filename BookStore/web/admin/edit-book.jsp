@@ -1,6 +1,6 @@
 <%-- 
-    Document   : add-book
-    Created on : Oct 30, 2025, 11:01:13 PM
+    Document   : edit-book
+    Created on : Oct 31, 2025, 11:20:58 AM
     Author     : Leo
 --%>
 
@@ -21,67 +21,73 @@
         <div class="main">
 
             <div class="breadcrumb">
-                Home <span>/</span> Admin <span>/</span> Books <span>/</span> Add Book
+                Home <span>/</span> Admin <span>/</span> Books <span>/</span> Edit Book
             </div>
             
             <c:if test="${not empty message}">
                 <div class="success-message">${message}</div>
             </c:if>
-                
+            
             <div class="form-container">
-                <h2>Add new book</h2>
-                <form id="addBookForm" action="add" method="post" enctype="multipart/form-data">
+                <h2>Edit book</h2>
+                <form id="editBookForm" action="editbook" method="post" enctype="multipart/form-data">
 
+                     <input type="hidden" name="bookId" value="${book.bookID}" />
+                    
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" id="title" name="title" required>
+                        <input type="text" id="title" name="title" value="${book.title}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="authorId">Author</label>
-                        <input type="text" id="authorId" name="author">
+                        <input type="text" id="authorId" name="author" value="${book.author}">
                     </div>
 
                     <div class="form-group">
                         <label for="publisherId">Publisher</label>
-                        <input type="text" id="publisher" name="publisher">
+                        <input type="text" id="publisher" name="publisher" value="${book.publisher}">
                     </div>
 
                     <div class="form-group">
                         <label for="categoryId">Category</label>
                         <select name="category">
                             <c:forEach items="${categories}" var="c">
-                                <option value="${c.categoryID}">${c.categoryName}</option>
+                                <option value="${c.categoryID}" ${book.categoryID==c.categoryID?"selected":""}>
+                                    ${c.categoryName}
+                                </option>
                             </c:forEach>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="isbn">ISBN</label>
-                        <input type="text" id="isbn" name="isbn">
+                        <input type="text" id="isbn" name="isbn" value="${book.isbn}">
                     </div>
 
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number" id="price" name="price" min="0">
+                        <input type="number" id="price" name="price" min="0" value="${book.price}">
                     </div>
 
                     <div class="form-group">
                         <label for="stock">Stock</label>
-                        <input type="number" id="stock" name="stock" min="0">
+                        <input type="number" id="stock" name="stock" min="0" value="${book.stock}">
                     </div>
 
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea id="description" name="description"></textarea>
+                        <textarea id="description" name="description">${book.description}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="imageUrl">Image</label>
                         <input type="file" id="imageUrl" name="imageUrl" accept="image/*">
-                        <div class="preview" id="preview"></div>
+                        <div class="preview" id="preview">
+                            <img src="../${book.imageUrl}" alt="book image">
+                        </div>
                     </div>
-                    <button type="submit" class="btn">Add book</button>
+                    <button type="submit" class="btn">Update book</button>
                 </form>
             </div>
         </div>
@@ -103,3 +109,4 @@
         </script>
     </body>
 </html>
+

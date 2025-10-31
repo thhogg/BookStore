@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -26,7 +27,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(int bookID, String title, String author, String publisher, int categoryID, String isbn, int price, int stock, String description, String imageUrl, Date createdAt) {
+    public Book(int bookID, String title, String author, String publisher, int categoryID, String isbn, int price, int stock, String description, String imageUrl) {
         this.bookID = bookID;
         this.title = title;
         this.author = author;
@@ -37,7 +38,7 @@ public class Book {
         this.stock = stock;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.createdAt = createdAt;
+        setCreatedAt();
     }
 
     public int getBookID() {
@@ -126,6 +127,10 @@ public class Book {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+    
+    public void setCreatedAt() {
+        this.createdAt = Date.valueOf(LocalDate.now());
     }
 
    
