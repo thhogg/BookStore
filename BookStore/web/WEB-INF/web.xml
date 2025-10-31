@@ -12,6 +12,10 @@
         <servlet-name>EditBook</servlet-name>
         <servlet-class>controller.admin.EditBook</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageUser</servlet-name>
+        <servlet-class>controller.admin.ManageUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
         <url-pattern>/admin/books</url-pattern>
@@ -27,5 +31,9 @@
     <servlet-mapping>
         <servlet-name>EditBook</servlet-name>
         <url-pattern>/admin/editbook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageUser</servlet-name>
+        <url-pattern>/admin/users</url-pattern>
     </servlet-mapping>
 </web-app>
