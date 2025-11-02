@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.util.List;
@@ -97,20 +98,22 @@ public class EditBook extends HttpServlet {
 
             imagePart.write(uploadPath + File.separator + imageName);
         }
-      
+
         String imageUrl = uploadDir + File.separator + imageName;
-               
+
         Book b = bookDao.getBookByBookID(bookId);
         //delete old image file
-        String oldImagePath = getServletContext().getRealPath("")+b.getImageUrl();
-        File oldImageFile = new File(oldImagePath);
-        if (oldImageFile.exists()) {
-            boolean deleted = oldImageFile.delete();
-            if (!deleted) {
-                System.out.println("Could not delete old image: " + oldImagePath);
+        if (imageName != null) {
+            String oldImagePath = getServletContext().getRealPath("") + b.getImageUrl();
+            File oldImageFile = new File(oldImagePath);
+            if (oldImageFile.exists()) {
+                boolean deleted = oldImageFile.delete();
+                if (!deleted) {
+                    System.out.println("Could not delete old image: " + oldImagePath);
+                }
             }
         }
-        
+
         b.setTitle(title);
         b.setAuthor(author);
         b.setPublisher(publisher);
@@ -120,17 +123,18 @@ public class EditBook extends HttpServlet {
         b.setIsbn(isbn);
         b.setDescription(description);
         if (imageName != null) {
-            b.setImageUrl(imageUrl);   
+            b.setImageUrl(imageUrl);
         }
 
         bookDao.updateBook(bookId, b);
-        request.setAttribute("message", "Book updated successfully!");
+        HttpSession session = request.getSession();
+        session.setAttribute("message", "Book updated successfully!");
 
         List<Category> categories = categoryDao.getAllCategories();
         request.setAttribute("categories", categories);
         request.setAttribute("book", b);
-        
-        request.getRequestDispatcher("edit-book.jsp").forward(request, response);
+
+        response.sendRedirect("books");
     }
 
 }

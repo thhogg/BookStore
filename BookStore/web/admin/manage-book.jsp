@@ -23,15 +23,34 @@
             <div class="breadcrumb">
                 Home <span>/</span> Admin <span>/</span> Books
             </div>
-            
+
             <c:if test="${not empty message}">
                 <div class="success-message">${message}</div>
             </c:if>
 
             <h1>All Books</h1>
 
+            <div class="search-sort-container">
+                <form method="post" action="books" >
+                    <input type="text" name="search" placeholder="Search by title, author..." 
+                           value="${search != null ? search : ''}" />
+
+                    <select name="sort">
+                        <option value="" ${sort == null || sort == '' ? 'selected' : ''}>Sort by</option>
+                        <option value="title_asc" ${sort == 'title_asc' ? 'selected' : ''}>Title A → Z</option>
+                        <option value="title_desc" ${sort == 'title_desc' ? 'selected' : ''}>Title Z → A</option>
+                        <option value="price_asc" ${sort == 'price_asc' ? 'selected' : ''}>Price Low → High</option>
+                        <option value="price_desc" ${sort == 'price_desc' ? 'selected' : ''}>Price High → Low</option>
+                        <option value="stock_asc" ${sort == 'stock_asc' ? 'selected' : ''}>Stock Low → High</option>
+                        <option value="stock_desc" ${sort == 'stock_desc' ? 'selected' : ''}>Stock High → Low</option>
+                    </select>
+
+                    <button type="submit" class="add-btn"><i class="fa fa-search"></i> Search</button>
+                </form>
+            </div>
+
             <div>             
-                <a href="add" class="add-btn">+ Add book</a>
+                <a href="addbook" class="add-btn">+ Add book</a>
             </div>
 
             <table>

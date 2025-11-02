@@ -38,7 +38,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddBook</servlet-name>
-        <url-pattern>/admin/add</url-pattern>
+        <url-pattern>/admin/addbook</url-pattern>
     </servlet-mapping>
     <context-param>
         <param-name>dir-upload</param-name>

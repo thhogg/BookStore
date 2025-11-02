@@ -30,7 +30,7 @@
                 
             <div class="form-container">
                 <h2>Add new book</h2>
-                <form id="addBookForm" action="add" method="post" enctype="multipart/form-data">
+                <form id="addBookForm" action="addbook" method="post" enctype="multipart/form-data">
 
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -39,17 +39,17 @@
 
                     <div class="form-group">
                         <label for="authorId">Author</label>
-                        <input type="text" id="authorId" name="author">
+                        <input type="text" id="authorId" name="author" required>
                     </div>
 
                     <div class="form-group">
                         <label for="publisherId">Publisher</label>
-                        <input type="text" id="publisher" name="publisher">
+                        <input type="text" id="publisher" name="publisher" required>
                     </div>
 
                     <div class="form-group">
                         <label for="categoryId">Category</label>
-                        <select name="category">
+                        <select name="category" required>
                             <c:forEach items="${categories}" var="c">
                                 <option value="${c.categoryID}">${c.categoryName}</option>
                             </c:forEach>
@@ -58,17 +58,17 @@
 
                     <div class="form-group">
                         <label for="isbn">ISBN</label>
-                        <input type="text" id="isbn" name="isbn">
+                        <input type="text" id="isbn" name="isbn" required>
                     </div>
 
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number" id="price" name="price" min="0">
+                        <input type="number" id="price" name="price" min="0" required>
                     </div>
 
                     <div class="form-group">
                         <label for="stock">Stock</label>
-                        <input type="number" id="stock" name="stock" min="0">
+                        <input type="number" id="stock" name="stock" min="0" required>
                     </div>
 
                     <div class="form-group">
@@ -78,7 +78,7 @@
 
                     <div class="form-group">
                         <label for="imageUrl">Image</label>
-                        <input type="file" id="imageUrl" name="imageUrl" accept="image/*">
+                        <input type="file" id="imageUrl" name="imageUrl" accept="image/*" required>
                         <div class="preview" id="preview"></div>
                     </div>
                     <button type="submit" class="btn">Add book</button>

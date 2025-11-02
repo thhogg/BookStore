@@ -13,6 +13,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
+import model.Book;
 
 
 /**
@@ -45,7 +47,19 @@ public class Delete extends HttpServlet {
         } 
         
         if (type.equals("book")) {
+            
+            //delete book image file
+            Book b = bookDao.getBookByBookID(id);    
+            String oldImagePath = getServletContext().getRealPath("") + b.getImageUrl();
+            File oldImageFile = new File(oldImagePath);
+            if (oldImageFile.exists()) {
+                boolean deleted = oldImageFile.delete();
+                if (!deleted) {
+                    System.out.println("Could not delete old image: " + oldImagePath);
+                }
+            }
             bookDao.deleteById(id);
+            
             request.setAttribute("message", "Delete book successfully!");
             request.getRequestDispatcher("books").forward(request, response);
         }

@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.util.List;
@@ -105,8 +106,9 @@ public class AddBook extends HttpServlet {
         b.setCreatedAt();
         
         bookDao.insertBook(b);
-        request.setAttribute("message", "Add book successfully!");
-        request.getRequestDispatcher("add-book.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        session.setAttribute("message", "Add book successfully!");
+        response.sendRedirect("books");
     }
 
 }
