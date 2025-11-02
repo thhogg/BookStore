@@ -54,25 +54,31 @@ public class ManageBook extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String search = request.getParameter("search");
         String sort = request.getParameter("sort");
 
-       
         List<Book> books = bookDao.getAllBooks();
 
         // Search
         if (search != null && !search.trim().isEmpty()) {
             String normalizedSearch = normalizeText(search.trim());
             books.removeIf(book -> {
-                String normalizedTitle = normalizeText(book.getTitle());
-                String normalizedAuthor = normalizeText(book.getAuthor());
-                String normalizedDescription = normalizeText(book.getDescription());
+                String normalizedTitle = book.getTitle() == null ? "" : normalizeText(book.getTitle());
+                String normalizedAuthor = book.getAuthor() == null ? "" : normalizeText(book.getAuthor());
+                String normalizedDescription = book.getDescription() == null ? "" : normalizeText(book.getDescription());
 
                 return !(normalizedTitle.contains(normalizedSearch)
                         || normalizedAuthor.contains(normalizedSearch)
                         || normalizedDescription.contains(normalizedSearch));
             });
+
+            System.out.println("Search normalized: " + normalizedSearch);
+            for (Book book : books) {
+                System.out.println("Title normalized: " + normalizeText(book.getTitle()));
+                System.out.println("Author normalized: " + normalizeText(book.getAuthor()));
+                System.out.println("Description normalized: " + normalizeText(book.getDescription()));
+            }
         }
 
         //Sort
@@ -107,11 +113,21 @@ public class ManageBook extends HttpServlet {
     }
 
     public static String normalizeText(String str) {
-        // Chuẩn hóa Unicode, tách các ký tự có dấu thành ký tự gốc và dấu riêng
+        if (str == null) {
+            return "";
+        }
+        // Chuẩn hóa Unicode (NFD)
         String temp = Normalizer.normalize(str, Normalizer.Form.NFD);
-        // Loại bỏ các ký tự dấu
+        // Xóa các ký tự dấu
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(temp).replaceAll("").toLowerCase();
+        temp = pattern.matcher(temp).replaceAll("");
+        // Chuyển đ, Đ thành d, D
+        temp = temp.replace('đ', 'd').replace('Đ', 'D');
+        // Chuyển về chữ thường
+        temp = temp.toLowerCase();
+        // Chuẩn hóa khoảng trắng
+        temp = temp.replaceAll("\\s+", " ").trim();
+        return temp;
     }
 
 }
