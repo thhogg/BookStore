@@ -6,6 +6,7 @@
 package controller.admin;
 
 import dal.BookDAO;
+import dal.CategoryDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -22,11 +23,13 @@ public class Delete extends HttpServlet {
     
     private BookDAO bookDao;
     private UserDAO userDao;
+    private CategoryDAO cateogoryDao;
     
     @Override
     public void init() {
         bookDao = BookDAO.getInstance();
         userDao = UserDAO.getInstance();
+        cateogoryDao = CategoryDAO.getInstance();
     }
    
     @Override
@@ -51,6 +54,12 @@ public class Delete extends HttpServlet {
             userDao.deleteById(id);
             request.setAttribute("message", "Delete user successfully!");
             request.getRequestDispatcher("users").forward(request, response);
+        }
+        
+        if (type.equals("category")) {
+            cateogoryDao.deleteById(id);
+            request.setAttribute("message", "Delete category successfully!");
+            request.getRequestDispatcher("categories").forward(request, response);
         }
     } 
 

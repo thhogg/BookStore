@@ -28,6 +28,10 @@
         <servlet-name>AddUser</servlet-name>
         <servlet-class>controller.admin.AddUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditCategory</servlet-name>
+        <servlet-class>controller.admin.EditCategory</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
         <url-pattern>/admin/books</url-pattern>
@@ -59,5 +63,9 @@
     <servlet-mapping>
         <servlet-name>AddUser</servlet-name>
         <url-pattern>/admin/adduser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCategory</servlet-name>
+        <url-pattern>/admin/editcategory</url-pattern>
     </servlet-mapping>
 </web-app>

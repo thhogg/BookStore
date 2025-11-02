@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Category;
 
@@ -32,6 +33,14 @@ public class ManageCategory extends HttpServlet {
     throws ServletException, IOException {
         List<Category> categories = categoryDao.getAllCategories();
         request.setAttribute("categories",categories);
+        
+        HttpSession session = request.getSession();
+        String message = (String) session.getAttribute("message");
+        if (message != null) {
+            request.setAttribute("message", message);
+            session.removeAttribute("message");
+        }
+        
         request.getRequestDispatcher("manage-category.jsp").forward(request, response);
     } 
 

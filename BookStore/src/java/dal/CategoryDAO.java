@@ -28,7 +28,7 @@ public class CategoryDAO extends DBContext {
         }
         return instance;
     }
-    
+
     public List<Category> getAllCategories() {
         List<Category> list = new ArrayList<>();
         String sql = """
@@ -41,8 +41,8 @@ public class CategoryDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Category c = new Category(
-                        rs.getInt("CategoryID"), 
-                        rs.getString("CategoryName"), 
+                        rs.getInt("CategoryID"),
+                        rs.getString("CategoryName"),
                         rs.getString("Description"));
                 list.add(c);
             }
@@ -66,8 +66,8 @@ public class CategoryDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Category c = new Category(
-                        rs.getInt("CategoryID"), 
-                        rs.getString("CategoryName"), 
+                        rs.getInt("CategoryID"),
+                        rs.getString("CategoryName"),
                         rs.getString("Description"));
                 return c;
             }
@@ -76,5 +76,57 @@ public class CategoryDAO extends DBContext {
         }
 
         return null;
+    }
+
+    public void insertCategory(String categoryName, String description) {
+        String sql = """
+                     INSERT INTO [dbo].[Category]
+                                ([CategoryName]
+                                ,[Description])
+                      VALUES
+                      (?,?)""";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, categoryName);
+            ps.setString(2, description);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public void updateCategory(int id, Category c) {
+        String sql = """
+                     UPDATE [dbo].[Category]
+                        SET [CategoryName] = ?
+                           ,[Description] = ?
+                      WHERE CategoryID = ?""";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, c.getCategoryName());
+            ps.setString(2, c.getDescription());
+            ps.setInt(3, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void deleteById(int id) {
+        String sql = """
+                     DELETE FROM [dbo].[Category]
+                           WHERE CategoryID = ?""";
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 }
