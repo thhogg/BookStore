@@ -23,15 +23,38 @@
             <div class="breadcrumb">
                 Home <span>/</span> Admin <span>/</span> Users
             </div>
-            
+
             <c:if test="${not empty message}">
                 <div class="success-message">${message}</div>
             </c:if>
 
             <h1>All Users</h1>
 
+            <div class="search-sort-container">
+                <form method="post" action="users" >
+                    <input type="text" name="search" placeholder="Search by name, email..." 
+                           value="${search != null ? search : ''}" />
+
+                    <select name="sort">
+                        <option value="">Sort by</option>
+                        <option value="fullname_asc" ${sort == 'fullname_asc' ? 'selected' : ''}>Fullname A-Z</option>
+                        <option value="fullname_desc" ${sort == 'fullname_desc' ? 'selected' : ''}>Fullname Z-A</option>
+                        <option value="username_asc" ${sort == 'username_asc' ? 'selected' : ''}>Username A-Z</option>
+                        <option value="username_desc" ${sort == 'username_desc' ? 'selected' : ''}>Username Z-A</option>
+                        <option value="email_asc" ${sort == 'email_asc' ? 'selected' : ''}>Email A-Z</option>
+                        <option value="email_desc" ${sort == 'email_desc' ? 'selected' : ''}>Email Z-A</option>
+                        <option value="role_asc" ${sort == 'role_asc' ? 'selected' : ''}>Role A-Z</option>
+                        <option value="role_desc" ${sort == 'role_desc' ? 'selected' : ''}>Role Z-A</option>
+                        <option value="registered_asc" ${sort == 'registered_asc' ? 'selected' : ''}>Registered Oldest</option>
+                        <option value="registered_desc" ${sort == 'registered_desc' ? 'selected' : ''}>Registered Newest</option>
+                    </select>
+
+                    <button type="submit" class="add-btn"><i class="fa fa-search"></i> Search</button>
+                </form>
+            </div>
+
             <div>             
-                <a href="adduser" class="add-btn">+ Add user</a>
+                <a href="edituser" class="add-btn">+ Add user</a>
             </div>
 
             <table>
@@ -61,7 +84,7 @@
                                 <fmt:formatDate value="${u.createdAt}" pattern="dd/MM/yyyy" />
                             </td>
                             <td>
-                                <a href="adduser?type=edit&id=${u.userID}" class="btn btn-edit">
+                                <a href="edituser?type=edit&id=${u.userID}" class="btn btn-edit">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
                                 <a href="delete?type=user&id=${u.userID}" class="btn btn-delete"
@@ -76,7 +99,7 @@
             </table>
         </div>
         <!-- MAIN END-->
-        
+
         <script>
             function xacNhan(el) {
                 var title = el.getAttribute('data-title');

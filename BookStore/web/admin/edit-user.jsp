@@ -37,7 +37,7 @@
                     <h2>Add New User</h2>
                 </c:if>
 
-                <form id="addUserForm" action="adduser" method="post">
+                <form id="editUserForm" action="edituser" method="post">
 
                     <c:if test="${not empty editedUser}">
                         <input type="hidden" name="id" value="${editedUser.userID}" />

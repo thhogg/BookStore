@@ -25,8 +25,8 @@
         <servlet-class>controller.admin.Delete</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddUser</servlet-name>
-        <servlet-class>controller.admin.AddUser</servlet-class>
+        <servlet-name>EditUser</servlet-name>
+        <servlet-class>controller.admin.EditUser</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditCategory</servlet-name>
@@ -61,8 +61,8 @@
         <url-pattern>/admin/delete</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddUser</servlet-name>
-        <url-pattern>/admin/adduser</url-pattern>
+        <servlet-name>EditUser</servlet-name>
+        <url-pattern>/admin/edituser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditCategory</servlet-name>

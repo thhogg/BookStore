@@ -72,13 +72,6 @@ public class ManageBook extends HttpServlet {
                         || normalizedAuthor.contains(normalizedSearch)
                         || normalizedDescription.contains(normalizedSearch));
             });
-
-            System.out.println("Search normalized: " + normalizedSearch);
-            for (Book book : books) {
-                System.out.println("Title normalized: " + normalizeText(book.getTitle()));
-                System.out.println("Author normalized: " + normalizeText(book.getAuthor()));
-                System.out.println("Description normalized: " + normalizeText(book.getDescription()));
-            }
         }
 
         //Sort
@@ -112,7 +105,7 @@ public class ManageBook extends HttpServlet {
 
     }
 
-    public static String normalizeText(String str) {
+    private static String normalizeText(String str) {
         if (str == null) {
             return "";
         }

@@ -17,7 +17,7 @@ import model.User;
  *
  * @author Leo
  */
-public class AddUser extends HttpServlet {
+public class EditUser extends HttpServlet {
 
     private UserDAO userDao;
 
@@ -40,7 +40,7 @@ public class AddUser extends HttpServlet {
             } catch (NumberFormatException e) {
                 System.out.println(e);
                 request.setAttribute("message", "Invalid user ID");
-                request.getRequestDispatcher("add-user.jsp").forward(request, response);
+                request.getRequestDispatcher("edit-user.jsp").forward(request, response);
             }
             User u = userDao.getUserById(id);
             if (u != null) {
@@ -51,7 +51,7 @@ public class AddUser extends HttpServlet {
 
         }
 
-        request.getRequestDispatcher("add-user.jsp").forward(request, response);
+        request.getRequestDispatcher("edit-user.jsp").forward(request, response);
     }
 
     @Override
