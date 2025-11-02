@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,11 +23,15 @@
             <div class="breadcrumb">
                 Home <span>/</span> Admin <span>/</span> Users
             </div>
+            
+            <c:if test="${not empty message}">
+                <div class="success-message">${message}</div>
+            </c:if>
 
-            <h1>All Books</h1>
+            <h1>All Users</h1>
 
             <div>             
-                <a href="add" class="add-btn">+ Add user</a>
+                <a href="adduser" class="add-btn">+ Add user</a>
             </div>
 
             <table>
@@ -56,10 +61,12 @@
                                 <fmt:formatDate value="${u.createdAt}" pattern="dd/MM/yyyy" />
                             </td>
                             <td>
-                                <a href="editbook?bookId=${b.bookID}" class="btn btn-edit">
+                                <a href="adduser?type=edit&id=${u.userID}" class="btn btn-edit">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
-                                <a href="#" class="btn btn-delete">
+                                <a href="delete?type=user&id=${u.userID}" class="btn btn-delete"
+                                   data-title="${fn:escapeXml(u.userName)}" 
+                                   onclick="return xacNhan(this)">
                                     <i class="fa-solid fa-trash"></i> Delete
                                 </a>
                             </td>
@@ -69,5 +76,12 @@
             </table>
         </div>
         <!-- MAIN END-->
+        
+        <script>
+            function xacNhan(el) {
+                var title = el.getAttribute('data-title');
+                return confirm("Do you really want to delete this user: " + title + "?");
+            }
+        </script>
     </body>
 </html>

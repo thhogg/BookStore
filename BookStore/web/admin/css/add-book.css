@@ -24,6 +24,8 @@ label {
 .main input[type="text"],
 input[type="number"],
 input[type="datetime-local"],
+input[type="password"],
+input[type="email"],
 textarea,
 select {
     width: 100%;
@@ -64,22 +66,31 @@ input[type="file"] {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-
-.success-message {
-  background-color: #d4edda;       /* Màu nền xanh nhạt */
-  color: #155724;                  /* Màu chữ xanh đậm */
-  border: 1px solid #c3e6cb;      /* Viền xanh nhạt */
-  padding: 12px 20px;              /* Khoảng cách bên trong */
-  margin-bottom: 20px;             /* Khoảng cách dưới */
-  border-radius: 5px;              /* Bo tròn góc */
-  font-weight: 600;                /* Đậm vừa phải */
-  font-size: 1rem;                 /* Cỡ chữ chuẩn */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  animation: fadeIn 0.5s ease-in-out;
+.password-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
 }
 
-/* Hiệu ứng mờ dần khi hiển thị */
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-10px);}
-  to {opacity: 1; transform: translateY(0);}
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    width: 100%;
+    padding-right: 40px; /* chừa chỗ cho nút */
+    box-sizing: border-box;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #555;
+    padding: 0;
+}
+.eye-btn:focus {
+    outline: none;
 }

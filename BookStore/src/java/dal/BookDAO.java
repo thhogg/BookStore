@@ -178,4 +178,18 @@ public class BookDAO extends DBContext {
             System.out.println(e);
         }
     }
+
+    public void deleteById(int id) {
+        String sql = """
+                     DELETE FROM [dbo].[Book]
+                           WHERE BookID = ?""";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
 }

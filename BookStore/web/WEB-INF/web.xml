@@ -16,6 +16,18 @@
         <servlet-name>ManageUser</servlet-name>
         <servlet-class>controller.admin.ManageUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageCategory</servlet-name>
+        <servlet-class>controller.admin.ManageCategory</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Delete</servlet-name>
+        <servlet-class>controller.admin.Delete</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddUser</servlet-name>
+        <servlet-class>controller.admin.AddUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
         <url-pattern>/admin/books</url-pattern>
@@ -35,5 +47,17 @@
     <servlet-mapping>
         <servlet-name>ManageUser</servlet-name>
         <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageCategory</servlet-name>
+        <url-pattern>/admin/categories</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Delete</servlet-name>
+        <url-pattern>/admin/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddUser</servlet-name>
+        <url-pattern>/admin/adduser</url-pattern>
     </servlet-mapping>
 </web-app>

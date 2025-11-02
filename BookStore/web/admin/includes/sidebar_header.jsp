@@ -16,9 +16,9 @@
         <div class="sidebar">
             <h2>BookStore</h2>
             <ul>
-                <li><a href="dashboard.jsp"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
                 <li><a href="users"><i class="fa-solid fa-users"></i> Users</a></li>
-                <li><a href="#"><i class="fa-solid fa-layer-group"></i> Product Attributes</a></li>
+                <li><a href="categories"><i class="fa-solid fa-layer-group"></i> Book Categories</a></li>
                 <li><a href="books"><i class="fa-solid fa-book"></i> Books</a></li>
                 <li><a href="#"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a></li>
                 <li><a href="#"><i class="fa-solid fa-user-plus"></i> Sign Up</a></li>

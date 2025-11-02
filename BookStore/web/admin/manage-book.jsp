@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,6 +23,10 @@
             <div class="breadcrumb">
                 Home <span>/</span> Admin <span>/</span> Books
             </div>
+            
+            <c:if test="${not empty message}">
+                <div class="success-message">${message}</div>
+            </c:if>
 
             <h1>All Books</h1>
 
@@ -60,7 +65,9 @@
                                 <a href="editbook?bookId=${b.bookID}" class="btn btn-edit">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
-                                <a href="#" class="btn btn-delete">
+                                <a href="delete?type=book&id=${b.bookID}" class="btn btn-delete"
+                                   data-title="${fn:escapeXml(b.title)}" 
+                                   onclick="return xacNhan(this)">
                                     <i class="fa-solid fa-trash"></i> Delete
                                 </a>
                             </td>
@@ -70,6 +77,13 @@
             </table>
         </div>
         <!-- MAIN END-->
+
+        <script>
+            function xacNhan(el) {
+                var title = el.getAttribute('data-title');
+                return confirm("Do you really want to delete this book: " + title + "?");
+            }
+        </script>
 
     </body>
 </html>
