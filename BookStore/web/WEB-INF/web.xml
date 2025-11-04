@@ -32,6 +32,10 @@
         <servlet-name>EditCategory</servlet-name>
         <servlet-class>controller.admin.EditCategory</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DashboardController</servlet-name>
+        <servlet-class>controller.admin.DashboardController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
         <url-pattern>/admin/books</url-pattern>
@@ -67,5 +71,9 @@
     <servlet-mapping>
         <servlet-name>EditCategory</servlet-name>
         <url-pattern>/admin/editcategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardController</servlet-name>
+        <url-pattern>/DashboardController</url-pattern>
     </servlet-mapping>
 </web-app>

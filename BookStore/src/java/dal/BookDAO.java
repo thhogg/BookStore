@@ -192,4 +192,22 @@ public class BookDAO extends DBContext {
         }
 
     }
+    public int countAllBooks() {
+        String sql = "SELECT COUNT(BookID) AS Total FROM [dbo].[Book]";
+        int total = 0;
+        
+        // SỬ DỤNG TRY-WITH-RESOURCES để tự động đóng tài nguyên
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) { 
+            
+            if (rs.next()) {
+                total = rs.getInt("Total");
+            }
+        } catch (SQLException e) {
+            // Thay thế System.out.println(e) bằng Logging (nên dùng)
+            // hoặc ném ngoại lệ RuntimeException để Controller xử lý
+            e.printStackTrace(); 
+        }
+        return total;
+    }
 }
