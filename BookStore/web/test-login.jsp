@@ -21,7 +21,7 @@
 
     // 5. CHUYỂN HƯỚNG SANG TRANG SHOP
     // Sau khi đăng nhập giả, tự động đi đến trang shop
-    response.sendRedirect("test-shop.jsp");
+    response.sendRedirect("http://localhost:8080/BookStore/home");
 
 %>
 
@@ -32,7 +32,7 @@
 </head>
 <body>
     <p>Đang thực hiện đăng nhập giả lập... 
-    <a href="test-shop.jsp">Nhấn vào đây nếu trang không tự chuyển.</a>
+    <a href="/home">Nhấn vào đây nếu trang không tự chuyển.</a>
     </p>
 </body>
 </html>

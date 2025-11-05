@@ -11,7 +11,7 @@
 <c:if test="${sessionScope.cart == null || empty sessionScope.cart.items}">
     <div class="alert alert-info mt-3">
         Giỏ hàng của bạn đang trống.
-        <a href="${pageContext.request.contextPath}/views/home.jsp" class="alert-link">Tiếp tục mua sắm</a>
+        <a href="${pageContext.request.contextPath}/home" class="alert-link">Tiếp tục mua sắm</a>
     </div>
 </c:if>
 
@@ -64,7 +64,7 @@
                         </strong>
                     </h4>
                     <hr>
-                    <a href="${pageContext.request.contextPath}/test-shop.jsp" class="btn btn-outline-secondary">
+                    <a href="http://localhost:8080/BookStore/home" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
                     </a>
                     <a href="${pageContext.request.contextPath}/checkout" class="btn btn-success float-end">

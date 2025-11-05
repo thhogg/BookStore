@@ -16,14 +16,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
     <!-- Logo -->
-    <a class="navbar-brand fw-bold" href="http://localhost:8080/BookStore/views/home.jsp">
+    <a class="navbar-brand fw-bold" href="http://localhost:8080/BookStore/home">
       <i class="bi bi-book"></i> BookStore
-    </a>
-
-    <!-- Nút Admin bên phải logo -->
-    <a href="${pageContext.request.contextPath}/admin/dashboard" 
-       class="btn btn-dark ms-3">
-        <i class="bi bi-gear-fill"></i> Admin
     </a>
 
     <!-- Nút bật/tắt menu khi thu nhỏ -->
@@ -35,7 +29,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/test-shop.jsp">Shop</a>
+          <a class="nav-link" href="${pageContext.request.contextPath}/home">Shop</a>
         </li>
         <li class="nav-item">
           <c:if test="${sessionScope.account != null}">

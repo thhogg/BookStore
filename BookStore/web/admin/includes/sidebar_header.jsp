@@ -15,7 +15,7 @@
         <!-- SIDEBAR BEGIN-->
         <div class="sidebar">
             <h2 class="logo-brand">
-                <a href="${pageContext.request.contextPath}/views/home.jsp" 
+                <a href="${pageContext.request.contextPath}/home" 
                    style="text-decoration: none; color: inherit;">
                     <!-- Dùng icon sách để nhận diện -->
                     <i class="fa-solid fa-book-open-reader"></i> BookStore

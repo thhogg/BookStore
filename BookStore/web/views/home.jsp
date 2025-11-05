@@ -17,6 +17,11 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="home">BookStore</a>
+                    <!-- Nút Admin bên phải logo -->
+    <a href="${pageContext.request.contextPath}/admin/dashboard" 
+       class="btn btn-dark ms-3">
+        <i class="bi bi-gear-fill"></i> Admin
+    </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -66,7 +71,7 @@
                 <div class="col">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="Home.jsp">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
                             <li class="breadcrumb-item"><a href="#">Category</a></li>
                             <li class="breadcrumb-item active" aria-current="#">Sub-category</li>
                         </ol>
@@ -111,7 +116,8 @@
                                                 <p class="btn btn-danger btn-block">${o.price} Đ</p>
                                             </div>
                                             <div class="col">
-                                                <a href="#" class="btn btn-success btn-block">Add to cart</a>
+                                                <a href="${pageContext.request.contextPath}/add-to-cart?bookId=${o.bookID}&quantity=1"
+                                                   class="btn btn-success btn-block">Add to cart</a>
                                             </div>
                                         </div>
                                     </div>
