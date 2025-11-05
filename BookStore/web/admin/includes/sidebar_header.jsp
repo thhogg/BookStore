@@ -14,9 +14,15 @@
     <body>
         <!-- SIDEBAR BEGIN-->
         <div class="sidebar">
-            <h2>BookStore</h2>
+            <h2 class="logo-brand">
+                <a href="${pageContext.request.contextPath}/test-shop.jsp" 
+                   style="text-decoration: none; color: inherit;">
+                    <!-- Dùng icon sách để nhận diện -->
+                    <i class="fa-solid fa-book-open-reader"></i> BookStore
+                </a>
+            </h2>
             <ul>
-                <li><a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
                 <li><a href="users"><i class="fa-solid fa-users"></i> Users</a></li>
                 <li><a href="categories"><i class="fa-solid fa-layer-group"></i> Book Categories</a></li>
                 <li><a href="books"><i class="fa-solid fa-book"></i> Books</a></li>

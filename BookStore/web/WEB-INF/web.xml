@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+
     <servlet>
         <servlet-name>ManageBook</servlet-name>
         <servlet-class>controller.admin.ManageBook</servlet-class>
@@ -32,10 +33,7 @@
         <servlet-name>EditCategory</servlet-name>
         <servlet-class>controller.admin.EditCategory</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>DashboardController</servlet-name>
-        <servlet-class>controller.admin.DashboardController</servlet-class>
-    </servlet>
+
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
         <url-pattern>/admin/books</url-pattern>
@@ -44,10 +42,12 @@
         <servlet-name>AddBook</servlet-name>
         <url-pattern>/admin/addbook</url-pattern>
     </servlet-mapping>
+    
     <context-param>
         <param-name>dir-upload</param-name>
         <param-value>uploads</param-value>
     </context-param>
+    
     <servlet-mapping>
         <servlet-name>EditBook</servlet-name>
         <url-pattern>/admin/editbook</url-pattern>
@@ -71,9 +71,5 @@
     <servlet-mapping>
         <servlet-name>EditCategory</servlet-name>
         <url-pattern>/admin/editcategory</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DashboardController</servlet-name>
-        <url-pattern>/DashboardController</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -172,4 +172,22 @@ public class UserDAO extends DBContext {
         }
     }
 
+    public int countAllUsers() {
+        // Giả sử bảng User của bạn có cột UserID
+        String sql = "SELECT COUNT(UserID) AS Total FROM [dbo].[Users]";
+        int total = 0;
+
+        // Dùng try-with-resources cho PreparedStatement và ResultSet
+        // (Giống hệt cách bạn làm trong BookDAO.countAllBooks)
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                total = rs.getInt("Total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
 }

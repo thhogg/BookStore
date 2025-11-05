@@ -362,3 +362,41 @@ tbody tr:hover {
         width: 100%;
     }
 }
+
+body {
+    /* Đã có display: flex; nên chỉ cần thêm overflow-y */
+    overflow-y: scroll; 
+}
+
+/* 2. Định nghĩa lại kiểu dáng logo */
+.sidebar .logo-brand {
+    /* Tùy chỉnh Logo Brand */
+    text-align: left; /* Giữ logo ở bên trái, đồng bộ với các menu item */
+    font-size: 1.3rem; /* Đồng bộ với .sidebar h2 hiện tại */
+    font-weight: 700; /* Đồng bộ với .sidebar h2 hiện tại */
+    color: #111827; /* Đồng bộ với .sidebar h2 hiện tại */
+    padding: 0 0 0 0.5rem; /* Thêm padding ngang nhỏ */
+    margin-bottom: 2rem; /* Đồng bộ với .sidebar h2 hiện tại */
+    /* Xóa border-bottom nếu không cần */
+}
+
+/* 3. Tùy chỉnh thẻ <a> bên trong logo */
+.sidebar .logo-brand a {
+    text-decoration: none;
+    color: inherit; /* Kế thừa màu chữ #111827 */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Khoảng cách giữa icon và chữ */
+    padding: 0; /* Xóa padding không cần thiết */
+}
+
+/* 4. Tùy chỉnh icon bên trong logo */
+.sidebar .logo-brand i {
+    font-size: 1.4rem; /* Icon to hơn một chút */
+    color: #2563eb; /* Màu nổi bật cho icon (ví dụ: màu xanh chính) */
+    margin-right: -5px; /* Giảm khoảng cách cho icon, nếu cần */
+}
+.sidebar .logo-brand a:hover {
+    background: transparent; /* Xóa màu nền hover */
+    color: inherit; /* Giữ nguyên màu chữ (màu đen/màu thương hiệu) */
+}
