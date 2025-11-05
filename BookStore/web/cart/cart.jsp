@@ -11,7 +11,7 @@
 <c:if test="${sessionScope.cart == null || empty sessionScope.cart.items}">
     <div class="alert alert-info mt-3">
         Giỏ hàng của bạn đang trống.
-        <a href="${pageContext.request.contextPath}/test-shop.jsp" class="alert-link">Tiếp tục mua sắm</a>
+        <a href="${pageContext.request.contextPath}/views/home.jsp" class="alert-link">Tiếp tục mua sắm</a>
     </div>
 </c:if>
 

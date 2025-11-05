@@ -16,7 +16,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
     <!-- Logo -->
-    <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/test-shop.jsp">
+    <a class="navbar-brand fw-bold" href="http://localhost:8080/BookStore/views/home.jsp">
       <i class="bi bi-book"></i> BookStore
     </a>
 

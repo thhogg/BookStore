@@ -23,6 +23,12 @@
             <h4>Thông tin Giao hàng</h4>
             <div class="card shadow-sm">
                 <div class="card-body">
+                    <%-- ĐẶT ĐOẠN CODE NÀY NGAY TRÊN <form> --%>
+<c:if test="${not empty requestScope.errorMsg}">
+    <div class="alert alert-danger" role="alert">
+        <strong>Lỗi:</strong> ${requestScope.errorMsg}
+    </div>
+</c:if>
                     <form action="${pageContext.request.contextPath}/place-order" method="POST">
                         
                         <div class="mb-3">

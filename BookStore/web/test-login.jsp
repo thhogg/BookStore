@@ -9,7 +9,7 @@
     User fakeUser = new User(); 
 
     // 3. Set các thông tin cho tài khoản giả (dùng đúng tên hàm trong User.java)
-    fakeUser.setUserID(5); // ID giả
+    fakeUser.setUserID(3); // ID giả
     fakeUser.setUserName("test_user"); // Tên đăng nhập giả
     fakeUser.setFullname("Người Dùng Thử Nghiệm"); // Tên đầy đủ giả
     fakeUser.setEmail("test@email.com"); // Email giả
