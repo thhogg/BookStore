@@ -38,15 +38,10 @@ public class Delete extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String type = request.getParameter("type");
-        String idStr = request.getParameter("id");
-        int id = 0;
-        try {
-            id = Integer.parseInt(idStr);
-        } catch (NumberFormatException e) {
-            System.out.println(e);
-        } 
-        
+            
         if (type.equals("book")) {
+            
+            int id = Integer.parseInt(request.getParameter("id"));
             
             //delete book image file
             Book b = bookDao.getBookByBookID(id);    
@@ -65,12 +60,16 @@ public class Delete extends HttpServlet {
         }
         
         if (type.equals("user")) {
-            userDao.deleteById(id);
+            String userName = request.getParameter("username");
+            userDao.deleteByUserName(userName);
             request.setAttribute("message", "Delete user successfully!");
             request.getRequestDispatcher("users").forward(request, response);
         }
         
         if (type.equals("category")) {
+            
+            int id = Integer.parseInt(request.getParameter("id"));
+            
             cateogoryDao.deleteById(id);
             request.setAttribute("message", "Delete category successfully!");
             request.getRequestDispatcher("categories").forward(request, response);
