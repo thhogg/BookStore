@@ -189,8 +189,7 @@ public class BookDAO extends DBContext {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
-        }
-
+        }   
     }
     public int countAllBooks() {
         String sql = "SELECT COUNT(BookID) AS Total FROM [dbo].[Book]";
