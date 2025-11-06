@@ -35,10 +35,10 @@
                             <a class="nav-link" href="#">Welcome</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Logout</a>
+                            <a class="nav-link" href="logout">Logout</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Login</a>
+                            <a class="nav-link" href="login">Login</a>
                         </li>
                     </ul>
 
