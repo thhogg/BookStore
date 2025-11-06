@@ -12,19 +12,13 @@ import java.time.LocalDate;
  * @author Leo
  */
 public class User {
-    private int userID;
     private String userName, password, fullname, email, phone, address, role;
     private Date createdAt;
 
     public User() {
     }
 
-    public User(int userID, String userName, 
-            String password, String fullname, 
-            String email, String phone, 
-            String address, String role) {
-        
-        this.userID = userID;
+    public User(String userName, String password, String fullname, String email, String phone, String address, String role, Date createdAt) {
         this.userName = userName;
         this.password = password;
         this.fullname = fullname;
@@ -32,15 +26,7 @@ public class User {
         this.phone = phone;
         this.address = address;
         this.role = role;
-        setCreatedAt();
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
+        this.createdAt = createdAt;
     }
 
     public String getUserName() {

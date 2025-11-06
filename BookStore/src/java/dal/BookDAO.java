@@ -10,7 +10,7 @@ import model.Book;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.DriverManager;
+
 /**
  *
  * @author Leo
@@ -189,8 +189,7 @@ public class BookDAO extends DBContext {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
-        }
-
+        }   
     }
     public int countAllBooks() {
         String sql = "SELECT COUNT(BookID) AS Total FROM [dbo].[Book]";
