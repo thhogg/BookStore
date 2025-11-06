@@ -189,5 +189,60 @@ public class UserDAO extends DBContext {
         }
         return total;
     }
+    
+    public User checkLogin(String username, String password) {
+        String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new User(
+                        rs.getInt("UserID"),
+                        rs.getString("UserName"),
+                        rs.getString("Password"),
+                        rs.getString("FullName"),
+                        rs.getString("Email"),
+                        rs.getString("Phone"),
+                        rs.getString("Address"),
+                        rs.getString("Role"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public boolean isUsernameExist(String username) {
+        String sql = "SELECT 1 FROM Users WHERE UserName = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean register(String username, String password, String fullName,
+                            String email, String phone, String address) {
+        String sql = "INSERT INTO Users (UserName, Password, FullName, Email, Phone, Address, Role) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, 'Customer')";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, fullName);
+            ps.setString(4, email);
+            ps.setString(5, phone);
+            ps.setString(6, address);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

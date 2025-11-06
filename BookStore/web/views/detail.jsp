@@ -113,7 +113,7 @@
                             <img class="img-fluid" src="${n.imageUrl}" />
                             <h5 class="card-title">${n.title}</h5>
                             <p class="card-text">${n.author}</p>
-                            <p class="bloc_left_price">${n.price} Đ</p>
+                            <p class="bloc_left_price">${n.price} VND</p>
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
 
                                         <p class="price-detail-wrap"> 
                                             <span class="price h3 text-warning"> 
-                                                <span class="currency">VN Đ</span><span class="num">${detail.price}</span>
+                                                <span class="currency"></span><span class="num">${detail.price} VND</span>
                                             </span> 
                                         </p> <!-- price-detail-wrap .// -->
                                         <dl class="item-property">

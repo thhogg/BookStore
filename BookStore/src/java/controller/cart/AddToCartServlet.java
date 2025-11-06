@@ -21,26 +21,16 @@ public class AddToCartServlet extends HttpServlet {
         
         String bookIdStr = request.getParameter("bookId");
         String quantityStr = request.getParameter("quantity");
-        
-        // --- SỬA LỖI Ở ĐÂY ---
-        // Thêm "lá chắn" để kiểm tra NULL hoặc RỖNG
+
         if (bookIdStr == null || bookIdStr.isEmpty()) {
-            
-            // Nếu không có bookId, đây là 1 request lỗi.
-            // (In ra lỗi để chúng ta biết)
             System.err.println("AddToCartServlet: bookIdStr bị null hoặc rỗng!");
-            
-            // Không làm gì cả và đưa người dùng về trang shop
             response.sendRedirect("test-shop.jsp");
             
             return; // Dừng hàm ngay lập tức
         }
-        // --- KẾT THÚC SỬA LỖI ---
-        
-        // Code bên dưới chỉ chạy khi bookIdStr CHẮC CHẮN CÓ GIÁ TRỊ
-        
+                
         try {
-            int bookId = Integer.parseInt(bookIdStr); // Dòng 27 cũ (bây giờ đã an toàn)
+            int bookId = Integer.parseInt(bookIdStr); 
             int quantity = 1; 
             if (quantityStr != null && !quantityStr.isEmpty()) {
                 quantity = Integer.parseInt(quantityStr);

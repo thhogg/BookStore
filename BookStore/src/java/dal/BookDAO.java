@@ -236,13 +236,13 @@ public class BookDAO extends DBContext {
     }
     
     
-    public List<Book> getBookByCID(String categoryID) {
+    public List<Book> getBookByCID(int categoryID) {
         List<Book> list = new ArrayList<>();
         String query = "select * from Book \n"
                 + "where CategoryID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, categoryID);
+            ps.setInt(1, categoryID);
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()){
@@ -262,13 +262,37 @@ public class BookDAO extends DBContext {
         }
         return list;
     }
-    
-        public static void main(String[] args) {
-        BookDAO dao = BookDAO.getInstance();
-        List<Book> list = dao.getBookByCID("1");
-        for (Book b : list) {
-            System.out.println(b.getBookID() + " - " + b.getTitle());
+    public List<Book> searchByName(String txtSearch) {
+        List<Book> list = new ArrayList<>();
+        String query = "SELECT * FROM Book WHERE [title] like ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, "%" + txtSearch + "%"); // Đúng kiểu int
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new Book(
+                            rs.getInt("BookID"),
+                            rs.getString("Title"),
+                            rs.getString("Author"),
+                            rs.getString("Publisher"),
+                            rs.getInt("CategoryID"),
+                            rs.getString("ISBN"),
+                            rs.getInt("Price"),
+                            rs.getInt("Stock"),
+                            rs.getString("Description"),
+                            rs.getString("ImageUrl")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         }
+
+        return list;
     }
+
+    
 
 }

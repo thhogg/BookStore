@@ -41,7 +41,7 @@ public class CheckoutServlet extends HttpServlet {
             // Lưu lại trang "checkout" để sau khi đăng nhập thì quay lại
             session.setAttribute("url", "checkout"); 
             // Đẩy (redirect) về trang đăng nhập
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("http://localhost:8080/BookStore/login");
         } else {
             // Nếu người dùng ĐÃ đăng nhập
             // Chuyển (forward) họ đến trang điền thông tin thanh toán
