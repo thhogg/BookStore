@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.sql.SQLException;
 import model.Book;
 
 /**
@@ -82,13 +83,20 @@ public class Delete extends HttpServlet {
         if (type.equals("category")) {
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
-                cateogoryDao.deleteById(id);
-                request.setAttribute("message", "Delete category successfully!");
+                int rowsDeleted = cateogoryDao.deleteById(id);
+                if (rowsDeleted > 0) {
+                    request.setAttribute("successMessage", "Delete category successfully!");
+                } else {
+                    request.setAttribute("errorMessage", "Delete failed! Category ID " + id + " not found.");
+                }
             } catch (NumberFormatException e) {
-                request.setAttribute("message", "Error: Invalid Category ID format.");
+                request.setAttribute("errorMessage", "Error: Invalid Category ID format.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Delete category failed! This category may still contain books and cannot be deleted.");
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute("message", "Delete category failed! This category may still contain books.");
+                request.setAttribute("errorMessage", "Delete category failed due to an unexpected error.");
             }
 
             request.getRequestDispatcher("categories").forward(request, response);
