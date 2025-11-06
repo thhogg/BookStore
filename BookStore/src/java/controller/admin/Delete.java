@@ -39,7 +39,7 @@ public class Delete extends HttpServlet {
         String type = request.getParameter("type");
 
         if (type.equals("book")) {
-            
+
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
 
@@ -93,11 +93,19 @@ public class Delete extends HttpServlet {
         if (type.equals("user")) {
             try {
                 String userName = request.getParameter("username");
-                userDao.deleteByUserName(userName);
-                request.setAttribute("message", "Delete user successfully!");
+                int rowsDeleted = userDao.deleteByUserName(userName);
+                if (rowsDeleted > 0) {
+                    request.setAttribute("successMessage", "Delete user '" + userName + "' successfully!");
+                } else {
+                    request.setAttribute("errorMessage", "Delete failed! User '" + userName + "' not found in the database.");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Delete user failed! Please check if the user exists or if there are related records.");
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute("message", "Delete user failed! Please check if the user exists or if there are related records.");
+                request.setAttribute("errorMessage", "Delete user failed! An unexpected system error occurred: " + e.getMessage());
             }
 
             request.getRequestDispatcher("users").forward(request, response);

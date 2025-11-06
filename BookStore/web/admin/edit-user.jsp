@@ -49,7 +49,9 @@
 
                     <div class="form-group">
                         <label for="userName">Username</label>
-                        <input type="text" id="userName" name="userName" value="${editedUser.userName}" readonly>
+                        <input type="text" id="userName" name="userName" 
+                               value="${editedUser.userName}" 
+                               ${editedUser!=null?"readonly":""}>
                     </div>
 
                     <div class="form-group">

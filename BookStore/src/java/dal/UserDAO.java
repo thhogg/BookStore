@@ -154,18 +154,15 @@ public class UserDAO extends DBContext {
         }
     }
     
-    public void deleteByUserName(String userName) {
+    public int deleteByUserName(String userName) throws SQLException {
         String sql = """
                      DELETE FROM [dbo].[Users]
                            WHERE UserName = ?""";
         
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {   
             ps.setString(1, userName);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+            return ps.executeUpdate();
+        } 
     }
     
     public int countAllUsers() {
