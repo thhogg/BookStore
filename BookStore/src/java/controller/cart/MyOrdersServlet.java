@@ -1,6 +1,7 @@
 package controller.cart; // Nhớ đảm bảo tên package có 's'
 
 import dal.OrderDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,31 +25,35 @@ public class MyOrdersServlet extends HttpServlet {
         // 1. Kiểm tra đăng nhập
         User account = (User) session.getAttribute("acc"); 
 
-        // Nếu chưa đăng nhập, đá về trang login
         if (account == null) {
-            response.sendRedirect("login.jsp");
+            // SỬA LẠI NHƯ SAU:
+            String contextPath = request.getContextPath();
+            response.sendRedirect(contextPath + "login"); // Thêm /login.jsp
             return;
         }
 
         try {
-            // 2. Lấy UserID từ tài khoản
-            int userID = account.getUserName(); // Giả sử model User/Account có hàm getUserID()
+            // 2. Lấy UserName (String) từ tài khoản
+            // Giả sử model User của bạn có hàm getUserName() trả về String
+            String userName = account.getUserName(); 
 
             // 3. Gọi DAO để lấy danh sách đơn hàng
             OrderDAO orderDAO = OrderDAO.getInstance();
-            List<Order> orderList = orderDAO.getOrdersByUserID(userID);
+            
+            // TẠO PHƯƠNG THỨC NÀY TRONG OrderDAO (xem hướng dẫn bên dưới)
+            List<Order> orderList = orderDAO.getOrdersByUserName(userName);
 
             // 4. Gửi danh sách đơn hàng sang trang JSP
             request.setAttribute("orderList", orderList);
 
             // 5. Chuyển hướng (forward) sang trang "my-orders.jsp"
-            // (Chúng ta sẽ tạo file này ở bước tiếp theo)
             request.getRequestDispatcher("cart/my-orders.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             // Xử lý nếu có lỗi
-            response.sendRedirect("index.jsp");
+            String contextPath = request.getContextPath(); // Thêm contextPath
+            response.sendRedirect(contextPath + "/index.jsp"); // Thêm /index.jsp
         }
     }
 
@@ -62,5 +67,22 @@ public class MyOrdersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+    }
+    public static void main(String[] args) {
+        // 1. Nhập username + password để test
+        String username = "user1";    // thay bằng username trong DB
+        String password = "123456";      // thay bằng password tương ứng
+
+        // 2. Gọi hàm checkLogin
+        User user = UserDAO.getInstance().checkLogin(username, password);
+
+        // 3. Kiểm tra kết quả
+        if (user == null) {
+            System.out.println("❌ Sai tên đăng nhập hoặc mật khẩu!");
+        } else {
+            System.out.println("✅ Đăng nhập thành công!");
+            System.out.println("Tên đăng nhập: " + user.getUserName());
+            System.out.println("Vai trò: " + user.getRole());
+        }
     }
 }

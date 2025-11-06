@@ -154,29 +154,28 @@ public class UserDAO extends DBContext {
         }
     }
     
-    public void deleteByUserName(String userName) {
+    public int deleteByUserName(String userName) throws SQLException {
         String sql = """
                      DELETE FROM [dbo].[Users]
                            WHERE UserName = ?""";
         
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {   
             ps.setString(1, userName);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+            return ps.executeUpdate();
+        } 
     }
     
     public int countAllUsers() {
-        // Giả sử bảng User của bạn có cột UserID
-        String sql = "SELECT COUNT(UserID) AS Total FROM [dbo].[Users]";
+
+        // SỬA SQL: Đếm UserName và thêm WHERE Role = 'Customer'
+        String sql = "SELECT COUNT(UserName) AS Total "
+                + "FROM [dbo].[Users] "
+                + "WHERE [Role] = 'Customer'"; // <-- THÊM DÒNG NÀY
+
         int total = 0;
 
-        // Dùng try-with-resources cho PreparedStatement và ResultSet
-        // (Giống hệt cách bạn làm trong BookDAO.countAllBooks)
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            
+
             if (rs.next()) {
                 total = rs.getInt("Total");
             }
@@ -185,7 +184,6 @@ public class UserDAO extends DBContext {
         }
         return total;
     }
-    
     public User checkLogin(String username, String password) {
         String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

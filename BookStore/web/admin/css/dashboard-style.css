@@ -1,41 +1,147 @@
-.dashboard-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px; /* Khoảng cách giữa các card */
+/* =============================
+   1. Bố cục chung
+============================= */
+.main {
+    padding: 30px;
+    background: #f9fafb;
+    min-height: 100vh;
+    margin-top: 50px; /* 👈 chỉnh số này = chiều cao header (thường 60–80px) */
 }
-.dashboard-card {
-    background: #fff;
-    padding: 20px;
+
+.breadcrumb {
+    color: #343a40;
+    font-size: 15px;
+    font-weight: 500;
+    background-color: #fff;
+    padding: 10px 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    flex-basis: 250px; /* Chiều rộng cơ bản của mỗi card */
-    flex-grow: 1; /* Cho phép card co giãn */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    display: inline-block;
+    margin-bottom: 25px;
+
+    /* 👇 Thêm 3 dòng này để fix bị che/cắt chữ */
+    line-height: 1.6;     
+    overflow: visible;
+    position: relative;
+}
+
+/* =============================
+   2. Khung thống kê (Cards)
+============================= */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.dashboard-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.dashboard-card .card-content h3 {
-    font-size: 2.5rem;
-    margin: 0;
-}
-.dashboard-card .card-content p {
-    font-size: 1rem;
-    margin: 0;
-    color: #666;
-}
-.dashboard-card .card-icon {
-    font-size: 3rem;
-    color: #007bff; /* Màu icon, bạn có thể đổi */
-}
-/* Đổi màu icon cho các card khác */
-.card-users .card-icon {
-    color: #28a745;
-}
-.card-orders .card-icon {
-    color: #ffc107;
-}
-.card-revenue .card-icon {
-    color: #dc3545;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #0d6efd; /* màu mặc định */
+    transition: all 0.3s ease;
 }
 
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
 
+/* Typography */
+.card-content h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.card-content p {
+    color: #555;
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Icon */
+.card-icon {
+    font-size: 2.8rem;
+    opacity: 0.8;
+}
+
+/* =============================
+   3. Màu sắc riêng từng card
+============================= */
+.card-revenue {
+    border-left-color: #dc3545;
+}
+.card-revenue .card-icon { color: #dc3545; }
+
+.card-users {
+    border-left-color: #198754;
+}
+.card-users .card-icon { color: #198754; }
+
+.card-books {
+    border-left-color: #0d6efd;
+}
+.card-books .card-icon { color: #0d6efd; }
+
+.card-orders {
+    border-left-color: #ffc107;
+}
+.card-orders .card-icon { color: #ffc107; }
+
+.card-sold {
+    border-left-color: #6610f2;
+}
+.card-sold .card-icon { color: #6610f2; }
+
+.card-buyers {
+    border-left-color: #17a2b8;
+}
+.card-buyers .card-icon { color: #17a2b8; }
+
+/* =============================
+   4. Bảng top khách hàng
+============================= */
+.form-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 35px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-container h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.table th,
+table.table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+}
+
+table.table th {
+    background: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+}
+
+table.table tr:hover {
+    background-color: #f1f3f5;
+}

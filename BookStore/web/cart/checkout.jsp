@@ -8,14 +8,16 @@
 
 <h1><i class="bi bi-wallet2"></i> Thông tin Thanh toán</h1>
 
-<c:if test="${sessionScope.cart == null || empty sessionScope.cart.items || sessionScope.account == null}">
+<%-- SỬA 1: Dùng "acc" thay vì "account" --%>
+<c:if test="${sessionScope.cart == null || empty sessionScope.cart.items || sessionScope.acc == null}">
     <div class="alert alert-warning" role="alert">
         Giỏ hàng của bạn đang trống hoặc bạn chưa đăng nhập.
         <a href="${pageContext.request.contextPath}/cart/cart.jsp" class="alert-link">Quay lại giỏ hàng</a>.
     </div>
 </c:if>
 
-<c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items && sessionScope.account != null}">
+<%-- SỬA 2: Dùng "acc" thay vì "account" --%>
+<c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items && sessionScope.acc != null}">
     
     <div class="row g-4 mt-3">
         
@@ -23,27 +25,34 @@
             <h4>Thông tin Giao hàng</h4>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <%-- ĐẶT ĐOẠN CODE NÀY NGAY TRÊN <form> --%>
-<c:if test="${not empty requestScope.errorMsg}">
-    <div class="alert alert-danger" role="alert">
-        <strong>Lỗi:</strong> ${requestScope.errorMsg}
-    </div>
-</c:if>
+                    <%-- Hiển thị lỗi nếu có (từ PlaceOrderServlet) --%>
+                    <c:if test="${not empty requestScope.errorMsg}">
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Lỗi:</strong> ${requestScope.errorMsg}
+                        </div>
+                    </c:if>
+                    
                     <form action="${pageContext.request.contextPath}/place-order" method="POST">
                         
                         <div class="mb-3">
                             <label for="name" class="form-label">Họ và Tên người nhận</label>
+                            <%-- SỬA 3: Dùng "acc.fullname" (vì UserDAO của bạn dùng 'fullname') --%>
                             <input type="text" id="name" name="name" class="form-control" 
-                                   value="${sessionScope.account.fullname}" required> </div>
+                                   value="${sessionScope.acc.fullname}" required>
+                        </div>
 
                         <div class="mb-3">
                             <label for="phone" class="form-label">Số điện thoại</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" required>
+                            <%-- Tự động điền SĐT nếu có --%>
+                            <input type="tel" id="phone" name="phone" class="form-control" 
+                                   value="${sessionScope.acc.phone}" required>
                         </div>
                         
                         <div class="mb-3">
                             <label for="address" class="form-label">Địa chỉ Giao hàng</label>
-                            <input type="text" id="address" name="address" class="form-control" required>
+                             <%-- Tự động điền Địa chỉ nếu có --%>
+                            <input type="text" id="address" name="address" class="form-control" 
+                                   value="${sessionScope.acc.address}" required>
                         </div>
                         
                         <div class="mb-3">
@@ -64,10 +73,15 @@
             <h4>Tóm tắt Đơn hàng</h4>
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <strong>${sessionScope.cart.items.size()}</strong> sản phẩm
+                    <%-- 
+                        SỬA LỖI (Quan trọng): 
+                        Chúng ta dùng ${cart} (từ requestScope) mà CheckoutServlet đã gửi qua.
+                        Không nên dùng ${sessionScope.cart} ở đây nữa.
+                    --%>
+                    <strong>${cart.items.size()}</strong> sản phẩm
                 </div>
                 <ul class="list-group list-group-flush">
-                    <c:forEach var="item" items="${sessionScope.cart.items}">
+                    <c:forEach var="item" items="${cart.items}">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="my-0 text-truncate" style="max-width: 250px;">${item.book.title}</h6>
@@ -82,7 +96,7 @@
                     <li class="list-group-item d-flex justify-content-between bg-light">
                         <strong>Tổng cộng (VND)</strong>
                         <strong class="text-danger">
-                            <fmt:formatNumber value="${sessionScope.cart.totalMoney}" type="currency" currencySymbol="đ" />
+                            <fmt:formatNumber value="${cart.totalMoney}" type="currency" currencySymbol="đ" />
                         </strong>
                     </li>
                 </ul>

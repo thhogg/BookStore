@@ -3,6 +3,9 @@ package model;
 public class Item {
     private Book book;
     private int quantity;
+    
+    // totalPrice được tính toán, không cần lưu
+    // private int totalPrice; 
 
     public Item() {
     }
@@ -28,8 +31,8 @@ public class Item {
         this.quantity = quantity;
     }
     
-    // Phương thức tiện ích: Tính tiền cho mặt hàng này
-    public double getTotalPrice() {
+    // Hàm này tự động tính tổng tiền cho 1 item
+    public int getTotalPrice() {
         return book.getPrice() * quantity;
     }
 }

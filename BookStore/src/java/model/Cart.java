@@ -1,76 +1,81 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Cart {
     
-    // Danh sách các mặt hàng (Item) trong giỏ
-    private List<Item> items;
+    // Dùng Map để lưu trữ, với Key là BookID, Value là Item
+    // Giúp tìm kiếm và cập nhật số lượng cực kỳ nhanh
+    private Map<Integer, Item> items;
 
     public Cart() {
-        items = new ArrayList<>();
+        items = new HashMap<>();
     }
 
-    public List<Item> getItems() {
-        return items;
-    }
-
+    // =======================================================
+    // HÀM addItem ĐÃ SỬA LẠI LOGIC
+    // =======================================================
     /**
-     * Lấy một Item từ giỏ hàng dựa trên BookID.
-     * @param bookId ID của sách.
-     * @return Trả về Item nếu tìm thấy, ngược lại trả về null.
-     */
-    private Item getItemByBookId(int bookId) {
-        for (Item item : items) {
-            if (item.getBook().getBookID() == bookId) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Thêm một mặt hàng (Item) vào giỏ hàng.
-     * Logic:
-     * - Nếu sách đã có trong giỏ -> tăng số lượng.
-     * - Nếu sách chưa có trong giỏ -> thêm mới vào danh sách.
-     * @param newItem Item mới cần thêm.
+     * Thêm một Item vào giỏ hàng.
+     * Tự động kiểm tra nếu sách đã tồn tại thì cộng dồn số lượng.
      */
     public void addItem(Item newItem) {
-        // Kiểm tra xem item (sách) đã có trong giỏ hàng chưa
-        Item existingItem = getItemByBookId(newItem.getBook().getBookID());
+        int bookId = newItem.getBook().getBookID();
 
-        if (existingItem != null) {
-            // Nếu đã có -> Cộng dồn số lượng
-            int newQuantity = existingItem.getQuantity() + newItem.getQuantity();
-            existingItem.setQuantity(newQuantity);
+        // 1. Kiểm tra xem sách đã có trong giỏ hàng (Map) chưa
+        if (items.containsKey(bookId)) {
+            // 2. Nếu ĐÃ CÓ:
+            // Lấy item cũ ra
+            Item oldItem = items.get(bookId);
+            
+            // Cộng dồn số lượng
+            int newQuantity = oldItem.getQuantity() + newItem.getQuantity();
+            
+            // Cập nhật lại số lượng cho item cũ
+            oldItem.setQuantity(newQuantity);
+            
         } else {
-            // Nếu chưa có -> Thêm item mới vào danh sách
-            items.add(newItem);
+            // 3. Nếu CHƯA CÓ:
+            // Thêm item mới vào giỏ (Map)
+            items.put(bookId, newItem);
         }
     }
 
     /**
-     * Xóa một mặt hàng khỏi giỏ hàng dựa trên BookID.
-     * @param bookId ID của sách cần xóa.
+     * Xóa một item khỏi giỏ hàng
      */
     public void removeItem(int bookId) {
-        Item item = getItemByBookId(bookId);
-        if (item != null) {
-            items.remove(item);
+        if (items.containsKey(bookId)) {
+            items.remove(bookId);
         }
     }
-
+    
     /**
-     * Tính tổng tiền của toàn bộ giỏ hàng.
-     * @return Tổng tiền.
+     * Lấy danh sách (List) các Item để JSP có thể lặp (forEach)
      */
-    public double getTotalMoney() {
-        double total = 0;
-        for (Item item : items) {
-            total += item.getTotalPrice(); // Dùng hàm getTotalPrice() của Item
+    public List<Item> getItems() {
+        // Chuyển đổi từ Map Values (các Item) sang một ArrayList
+        return new ArrayList<>(items.values());
+    }
+    
+    /**
+     * Tính tổng tiền của toàn bộ giỏ hàng
+     */
+    public int getTotalMoney() {
+        int total = 0;
+        for (Item item : items.values()) {
+            total += item.getTotalPrice();
         }
         return total;
+    }
+        public int getTotalQuantity() {
+        int totalQuantity = 0;
+        for (Item item : items.values()) {
+            totalQuantity += item.getQuantity();
+        }
+        return totalQuantity;
     }
 }

@@ -8,6 +8,7 @@
 
 <h1><i class="bi bi-cart-fill"></i> Giỏ hàng của bạn</h1>
 
+<%-- Phần kiểm tra giỏ hàng rỗng (Đã đúng) --%>
 <c:if test="${sessionScope.cart == null || empty sessionScope.cart.items}">
     <div class="alert alert-info mt-3">
         Giỏ hàng của bạn đang trống.
@@ -15,6 +16,7 @@
     </div>
 </c:if>
 
+<%-- Phần hiển thị giỏ hàng (Đã đúng) --%>
 <c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items}">
     <div class="table-responsive"> <table class="table table-hover align-middle mt-3">
             <thead class="table-light">
@@ -43,6 +45,7 @@
                             <fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="đ" />
                         </td>
                         <td>
+                            <%-- Link Xóa (Đã đúng) --%>
                             <a href="${pageContext.request.contextPath}/remove-from-cart?bookId=${item.book.bookID}" class="btn btn-outline-danger btn-sm">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
@@ -53,6 +56,7 @@
         </table>
     </div>
 
+    <%-- Phần Tổng tiền và Thanh toán --%>
     <div class="row justify-content-end mt-4">
         <div class="col-md-5">
             <div class="card shadow-sm">
@@ -64,9 +68,11 @@
                         </strong>
                     </h4>
                     <hr>
-                    <a href="http://localhost:8080/BookStore/home" class="btn btn-outline-secondary">
+                    
+                    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
                     </a>
+                    
                     <a href="${pageContext.request.contextPath}/checkout" class="btn btn-success float-end">
                         Tiến hành Thanh toán <i class="bi bi-arrow-right"></i>
                     </a>

@@ -1,21 +1,20 @@
 package dal;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.sql.Timestamp; // <-- Đảm bảo import đúng
+import java.util.ArrayList;
+import java.util.List;
 import model.Order;
-import model.OrderDetail;
+import model.OrderDetail; // Import OrderDetail
 
 public class OrderDAO extends DBContext {
 
     private static OrderDAO instance;
 
-    // Cấu trúc Singleton, giống hệt BookDAO
+    // Cấu trúc Singleton
     private OrderDAO() {
     }
 
@@ -27,143 +26,248 @@ public class OrderDAO extends DBContext {
     }
 
     /**
-     * Đếm tổng số đơn hàng đã đặt. Giả sử bảng của bạn tên là [Order] và cột
-     * khóa chính là [OrderID]
+     * Đếm tổng số đơn hàng đã đặt.
      */
     public int countAllOrders() {
         String sql = "SELECT COUNT(OrderID) AS Total FROM [dbo].[Order]";
         int total = 0;
-
-        // Dùng try-with-resources để tự động đóng ps và rs
-        // connection là biến được kế thừa từ DBContext
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
                 total = rs.getInt("Total");
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // In lỗi ra console
+            e.printStackTrace();
         }
         return total;
     }
 
     /**
-     * Tính tổng doanh thu từ tất cả các đơn hàng. Giả sử bảng của bạn tên là
-     * [Order] và cột tiền là [TotalPrice]
+     * Tính tổng doanh thu từ tất cả các đơn hàng (TotalAmount là INT).
      */
-    public double getTotalRevenue() {
-        // Bạn có thể muốn thêm điều kiện (ví dụ: WHERE Status = 'Completed')
-        String sql = "SELECT SUM(TotalAmount) AS Revenue FROM [dbo].[Order]";
-        double revenue = 0;
+    public long getTotalRevenue() {
 
+        String sql = "SELECT SUM(CAST(TotalAmount AS BIGINT)) AS Revenue "
+                + "FROM [dbo].[Order] "
+                + "WHERE [Status] = 'Completed'";
+
+        long revenue = 0;
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-
             if (rs.next()) {
-                // Dùng getDouble để lấy tổng tiền
-                revenue = rs.getDouble("Revenue");
+                revenue = rs.getLong("Revenue");
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // In lỗi ra console
+            e.printStackTrace();
         }
         return revenue;
     }
 
-    // (Sau này bạn sẽ thêm các hàm khác vào đây, ví dụ:
-    // public void insertOrder(Order order) { ... }
-    // public List<Order> getOrdersByUserID(int userID) { ... }
-    // )
+    /**
+     * Thêm một đơn hàng mới vào CSDL.
+     */
     public int addOrder(Order order) {
         String sql = "INSERT INTO [dbo].[Order] "
-                + "([UserID], [OrderDate], [TotalAmount], [PaymentMethod], [Status], [ShippingAddress]) "
+                + "([UserName], [OrderDate], [TotalAmount], [PaymentMethod], [Status], [ShippingAddress]) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        int newOrderID = -1; // Mặc định là -1 (thất bại)
-
-        // Chỉ cần 1 PreparedStatement
-        // Thêm cờ 'Statement.RETURN_GENERATED_KEYS'
+        int newOrderID = -1; 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            // 1. SET CÁC THAM SỐ
-            ps.setInt(1, order.getUserID());
-            ps.setDate(2, order.getOrderDate());
+            ps.setString(1, order.getUserName());
+            ps.setTimestamp(2, order.getOrderDate());
             ps.setInt(3, order.getTotalAmount());
             ps.setString(4, order.getPaymentMethod());
             ps.setString(5, order.getStatus());
             ps.setString(6, order.getShippingAddress());
 
-            // 2. CHẠY LỆNH INSERT
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows > 0) {
-                // 3. LẤY ID VỪA ĐƯỢC TẠO
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
-                        newOrderID = rs.getInt(1); // Lấy ID từ cột đầu tiên
+                        newOrderID = rs.getInt(1); 
                     }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // In lỗi ra
+            e.printStackTrace(); 
         }
-
-        return newOrderID; // Trả về ID (hoặc -1 nếu lỗi)
+        return newOrderID; 
     }
 
     /**
      * Thêm một chi tiết đơn hàng (một sản phẩm) vào DB.
-     *
-     * @param detail Đối tượng OrderDetail
      */
     public void addOrderDetail(OrderDetail detail) {
-        // Câu lệnh SQL dựa trên cấu trúc bảng của bạn
         String sql = "INSERT INTO [dbo].[OrderDetail] "
                 + "([OrderID], [BookID], [Quantity], [UnitPrice]) "
                 + "VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
             ps.setInt(1, detail.getOrderID());
             ps.setInt(2, detail.getBookID());
             ps.setInt(3, detail.getQuantity());
             ps.setInt(4, detail.getUnitPrice());
-
-            ps.executeUpdate(); // Thực thi insert
-
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Order> getOrdersByUserID(int userID) {
+    /**
+     * Lấy tất cả đơn hàng của một người dùng dựa trên UserName.
+     */
+    public List<Order> getOrdersByUserName(String userName) {
         List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[Order] WHERE [UserName] = ? ORDER BY [OrderDate] DESC";
 
-        // Sắp xếp theo ngày mới nhất lên trước
-        String sql = "SELECT * FROM [dbo].[Order] WHERE [UserID] = ? ORDER BY [OrderDate] DESC";
-
-        // 'connection' là biến kế thừa từ DBContext
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setInt(1, userID);
+            ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Order order = new Order();
-                    order.setOrderID(rs.getInt("OrderID"));
-                    order.setUserID(rs.getInt("UserID"));
-                    order.setOrderDate(rs.getDate("OrderDate"));
-                    order.setTotalAmount(rs.getInt("TotalAmount"));
-                    order.setPaymentMethod(rs.getString("PaymentMethod"));
-                    order.setStatus(rs.getString("Status"));
-                    order.setShippingAddress(rs.getString("ShippingAddress"));
-
+                    Order order = new Order(
+                            rs.getInt("OrderID"),
+                            rs.getString("UserName"),
+                            rs.getTimestamp("OrderDate"),
+                            rs.getInt("TotalAmount"),
+                            rs.getString("PaymentMethod"),
+                            rs.getString("Status"),
+                            rs.getString("ShippingAddress")
+                    );
                     list.add(order);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return list; // Trả về danh sách (có thể rỗng nếu user chưa mua hàng)
+        return list;
     }
+
+    /**
+     * Lấy TẤT CẢ đơn hàng để admin quản lý (sắp xếp theo ID giảm dần)
+     */
+    public List<Order> getAllOrders() {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM [Order] ORDER BY CAST(OrderID AS INT) DESC";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(new Order(
+                        rs.getInt("OrderID"),
+                        rs.getString("UserName"),
+                        rs.getTimestamp("OrderDate"), 
+                        rs.getInt("TotalAmount"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("Status"),
+                        rs.getString("ShippingAddress")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list; 
+    }
+
+    /**
+     * Cập nhật trạng thái đơn hàng (Admin dùng)
+     */
+    public boolean updateOrderStatus(int orderId, String newStatus) {
+        String sql = "UPDATE [Order] SET [Status] = ? WHERE OrderID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, orderId);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0; 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Lấy trạng thái hiện tại của đơn hàng.
+     */
+    public String getOrderStatusById(int orderId) {
+        String sql = "SELECT [Status] FROM [Order] WHERE OrderID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Status");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // <-- KHỐI CODE BỊ TRÙNG LẶP ĐÃ BỊ XÓA Ở ĐÂY -->
+
+    /**
+     * Lấy tất cả chi tiết (sản phẩm) của một đơn hàng.
+     */
+    public List<OrderDetail> getOrderDetailsByOrderID(int orderId) {
+        List<OrderDetail> list = new ArrayList<>();
+        String sql = "SELECT * FROM OrderDetail WHERE OrderID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Giả sử OrderDetail có constructor (orderDetailID, orderID, bookID, quantity, unitPrice)
+                    list.add(new OrderDetail(
+                            rs.getInt("OrderDetailID"),
+                            rs.getInt("OrderID"),
+                            rs.getInt("BookID"),
+                            rs.getInt("Quantity"),
+                            rs.getInt("UnitPrice")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // =======================================================
+    // HÀM MỚI CHO BƯỚC 2 (DASHBOARD)
+    // =======================================================
+    
+    /**
+     * Đếm tổng số sách đã bán (chỉ từ các đơn "Hoàn thành")
+     */
+    public int countTotalBooksSold() {
+        String sql = "SELECT SUM(od.Quantity) AS Total "
+                + "FROM OrderDetail od "
+                + "JOIN [Order] o ON od.OrderID = o.OrderID "
+                + "WHERE o.[Status] = 'Completed'";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("Total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Đếm số lượng khách hàng (duy nhất) đã mua hàng (đơn "Hoàn thành")
+     */
+    public int countPurchasingCustomers() {
+        String sql = "SELECT COUNT(DISTINCT UserName) AS Total "
+                + "FROM [Order] WHERE [Status] = 'Completed'";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("Total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+
 
 }

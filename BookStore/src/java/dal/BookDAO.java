@@ -179,36 +179,35 @@ public class BookDAO extends DBContext {
         }
     }
 
-    public void deleteById(int id) {
+    public int deleteById(int id) throws SQLException {
         String sql = """
                      DELETE FROM [dbo].[Book]
                            WHERE BookID = ?""";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }   
+            return ps.executeUpdate();
+        }
     }
+
     public int countAllBooks() {
         String sql = "SELECT COUNT(BookID) AS Total FROM [dbo].[Book]";
         int total = 0;
-        
+
         // SỬ DỤNG TRY-WITH-RESOURCES để tự động đóng tài nguyên
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) { 
-            
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
             if (rs.next()) {
                 total = rs.getInt("Total");
             }
         } catch (SQLException e) {
             // Thay thế System.out.println(e) bằng Logging (nên dùng)
             // hoặc ném ngoại lệ RuntimeException để Controller xử lý
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
         return total;
     }
+
     public Book getNew() {
         String query = "select top 1 * from Book order by BookID desc";
         try {
@@ -226,15 +225,14 @@ public class BookDAO extends DBContext {
                         rs.getInt("Stock"),
                         rs.getString("Description"),
                         rs.getString("ImageUrl"));
-                        
+
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
     }
-    
-    
+
     public List<Book> getBookByCID(int categoryID) {
         List<Book> list = new ArrayList<>();
         String query = "select * from Book \n"
@@ -243,8 +241,8 @@ public class BookDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, categoryID);
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 list.add(new Book(rs.getInt("BookID"),
                         rs.getString("Title"),
                         rs.getString("Author"),
@@ -257,10 +255,11 @@ public class BookDAO extends DBContext {
                         rs.getString("ImageUrl")));
             }
         } catch (Exception e) {
-            
+
         }
         return list;
     }
+
     public List<Book> searchByName(String txtSearch) {
         List<Book> list = new ArrayList<>();
         String query = "SELECT * FROM Book WHERE [title] like ?";
@@ -291,7 +290,37 @@ public class BookDAO extends DBContext {
 
         return list;
     }
+     public boolean decreaseStock(int bookId, int quantity) {
+        // Trừ số lượng (Stock) nhưng không cho phép âm
+        String sql = "UPDATE Book SET Stock = CASE "
+                + "WHEN (Stock - ?) < 0 THEN 0 "
+                + "ELSE (Stock - ?) "
+                + "END "
+                + "WHERE BookID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, quantity);
+            ps.setInt(3, bookId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-    
+    /**
+     * HOÀN KHO: Tăng số lượng tồn kho (khi đơn bị hủy).
+     */
+    public boolean increaseStock(int bookId, int quantity) {
+        String sql = "UPDATE Book SET Stock = Stock + ? WHERE BookID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, bookId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

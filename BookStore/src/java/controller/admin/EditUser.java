@@ -39,7 +39,7 @@ public class EditUser extends HttpServlet {
             if (u != null) {
                 request.setAttribute("editedUser", u);
             } else {
-                request.setAttribute("message", "User not found for editing");
+                request.setAttribute("errorMessage", "User not found for editing");
             }
 
         }
@@ -63,7 +63,7 @@ public class EditUser extends HttpServlet {
 
         if (type != null && type.equals("add")) {
             userDao.insertUser(userName, pass, fullname, email, phone, address, role);
-            session.setAttribute("message", "Add user successfully!");
+            session.setAttribute("successMessage", "Add user successfully!");
         }
 
         if (type != null && type.equals("edit")) {
@@ -78,9 +78,9 @@ public class EditUser extends HttpServlet {
                 u.setAddress(address);
                 u.setRole(role);
                 userDao.updateUser(userName, u);
-                session.setAttribute("message", "Update user successfully!");
+                session.setAttribute("successMessage", "Update user successfully!");
             } else {
-                session.setAttribute("message", "User not found for update");
+                session.setAttribute("errorMessage", "User not found for update");
             }
 
         }

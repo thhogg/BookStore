@@ -9,12 +9,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.Date; // Quan trọng: import java.sql.Date
+
+// SỬA 1: Import java.sql.Timestamp thay vì java.sql.Date
+import java.sql.Timestamp; 
+
 import model.Cart;
 import model.Item;
 import model.Order;
 import model.OrderDetail;
-import model.User; // Hoặc model.Account, tùy bạn đặt tên là gì
+import model.User; // Hoặc model.Account
 
 @WebServlet(name = "PlaceOrderServlet", urlPatterns = {"/place-order"})
 public class PlaceOrderServlet extends HttpServlet {
@@ -26,13 +29,14 @@ public class PlaceOrderServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         // 1. KIỂM TRA ĐIỀU KIỆN
-        // Lấy giỏ hàng và tài khoản từ session
         Cart cart = (Cart) session.getAttribute("cart");
-        User account = (User) session.getAttribute("account"); // Sửa "User" thành "Account" nếu tên class của bạn là Account
+        
+        // SỬA 2: Đổi "account" thành "acc" để khớp với các servlet khác của bạn
+        User account = (User) session.getAttribute("acc"); 
 
-        // Nếu 1 trong 2 không tồn tại, đá về trang chủ
+        // Nếu 1 trong 2 không tồn tại, đá về trang login
         if (cart == null || cart.getItems().isEmpty() || account == null) {
-            response.sendRedirect("index.jsp"); // Hoặc login.jsp
+            response.sendRedirect("login"); // Nên chuyển về login.jsp
             return;
         }
 
@@ -45,16 +49,20 @@ public class PlaceOrderServlet extends HttpServlet {
             String shippingAddress = "Name: " + name + ", Phone: " + phone + ", Address: " + address;
 
             // 3. TẠO ĐỐI TƯỢNG 'Order'
-            // Lấy ngày hiện tại
+            // Lấy ngày giờ hiện tại
             long millis = System.currentTimeMillis();
-            Date orderDate = new Date(millis);
+            // SỬA 3: Dùng Timestamp để lưu cả ngày VÀ giờ (khớp với DATETIME)
+            Timestamp orderDate = new Timestamp(millis); 
 
-            String paymentMethod = "COD"; // Thay vì null
-            String status = "Pending";    // Thay vì null
+            String paymentMethod = "COD"; // Giả sử mặc định là COD
+            String status = "Pending";    // Trạng thái ban đầu
 
             Order order = new Order();
-            order.setUserID(account.getUserID());
-            order.setOrderDate(orderDate);
+            
+            // SỬA 4: Dùng setUserName(String) thay vì setUserID(int)
+            order.setUserName(account.getUserName());
+            
+            order.setOrderDate(orderDate); // Truyền đối tượng Timestamp
             order.setTotalAmount((int) Math.round(cart.getTotalMoney()));
             order.setPaymentMethod(paymentMethod);
             order.setStatus(status);
@@ -62,7 +70,8 @@ public class PlaceOrderServlet extends HttpServlet {
 
             // 4. LƯU 'Order' VÀO DATABASE (dùng DAO)
             OrderDAO orderDAO = OrderDAO.getInstance();
-            int orderId = orderDAO.addOrder(order); // Hàm này trả về OrderID vừa tạo
+            // Hàm addOrder này đã được sửa ở bước trước để nhận UserName và Timestamp
+            int orderId = orderDAO.addOrder(order); 
 
             // 5. KIỂM TRA LƯU ORDER
             if (orderId == -1) {
@@ -79,7 +88,7 @@ public class PlaceOrderServlet extends HttpServlet {
                 detail.setOrderID(orderId);
                 detail.setBookID(item.getBook().getBookID());
                 detail.setQuantity(item.getQuantity());
-                detail.setUnitPrice(item.getBook().getPrice()); // Lấy giá sách (int)
+                detail.setUnitPrice(item.getBook().getPrice()); // Lấy giá sách
 
                 // Gọi DAO để lưu chi tiết đơn hàng
                 orderDAO.addOrderDetail(detail);
@@ -102,7 +111,6 @@ public class PlaceOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         // Không cho phép truy cập URL này bằng GET.
         // Chuyển hướng người dùng về trang giỏ hàng.
         response.sendRedirect("cart/cart.jsp");
@@ -111,7 +119,6 @@ public class PlaceOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         // Chỉ phương thức POST (từ form checkout) mới được xử lý
         processRequest(request, response);
     }

@@ -3,15 +3,25 @@ package model;
 public class OrderDetail {
 
     private int orderDetailID;
-    private int orderID; // Tên cột là OrderID
-    private int bookID; // Tên cột là BookID
-    private int quantity; // Tên cột là Quantity
-    private int unitPrice; // Tên cột là UnitPrice
+    private int orderID;
+    private int bookID;
+    private int quantity;
+    private int unitPrice;
 
     public OrderDetail() {
     }
 
-    // Constructor hữu ích khi tạo chi tiết đơn hàng
+    // SỬA LỖI: Thêm "orderDetailID" vào constructor
+    public OrderDetail(int orderDetailID, int orderID, int bookID, int quantity, int unitPrice) {
+        this.orderDetailID = orderDetailID;
+        this.orderID = orderID;
+        this.bookID = bookID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+    
+    // Constructor 4 tham số (dùng khi TẠO MỚI, chưa có ID)
+    // (Chúng ta có thể giữ lại)
     public OrderDetail(int orderID, int bookID, int quantity, int unitPrice) {
         this.orderID = orderID;
         this.bookID = bookID;
@@ -19,11 +29,15 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    // Thêm đầy đủ Getter và Setter cho tất cả các trường
-    // (Bấm chuột phải -> Insert Code -> Getter and Setter... trong NetBeans)
+
+    // --- Getter và Setter (Đầy đủ) ---
 
     public int getOrderDetailID() {
         return orderDetailID;
+    }
+
+    public void setOrderDetailID(int orderDetailID) {
+        this.orderDetailID = orderDetailID;
     }
 
     public int getOrderID() {
@@ -49,12 +63,6 @@ public class OrderDetail {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-    public void setOrderDetailID(int orderDetailID) {
-        this.orderDetailID = orderDetailID;
-    }
-    
-    // ... (Thêm getter/setter cho các trường còn lại) ...
 
     public int getUnitPrice() {
         return unitPrice;

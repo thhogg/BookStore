@@ -24,8 +24,12 @@
                 Home <span>/</span> Admin <span>/</span> Users
             </div>
 
-            <c:if test="${not empty message}">
-                <div class="success-message">${message}</div>
+            <c:if test="${not empty successMessage}">
+                <div class="message success">${successMessage}</div>
+            </c:if>
+
+            <c:if test="${not empty errorMessage}">
+                <div class="message error">${errorMessage}</div>
             </c:if>
 
             <h1>All Users</h1>

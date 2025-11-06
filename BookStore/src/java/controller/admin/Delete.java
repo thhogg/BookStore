@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.sql.SQLException;
 import model.Book;
 
 /**
@@ -40,27 +41,50 @@ public class Delete extends HttpServlet {
         if (type.equals("book")) {
 
             try {
-
                 int id = Integer.parseInt(request.getParameter("id"));
 
-                //delete book image file
                 Book b = bookDao.getBookByBookID(id);
-                String oldImagePath = getServletContext().getRealPath("") + b.getImageUrl();
-                File oldImageFile = new File(oldImagePath);
-                if (oldImageFile.exists()) {
-                    boolean deleted = oldImageFile.delete();
-                    if (!deleted) {
-                        System.out.println("Could not delete old image: " + oldImagePath);
+
+                if (b == null) {
+                    request.setAttribute("errorMessage", "Delete failed! Book ID " + id + " not found.");
+                } else {
+                    String successMsg = "Delete book successfully!";
+
+                    try {
+                        //delete from DB
+                        int rowsDeleted = bookDao.deleteById(id);
+                        if (rowsDeleted > 0) {
+
+                            //delete image
+                            if (b.getImageUrl() != null && !b.getImageUrl().isEmpty()) {
+                                String oldImagePath = getServletContext().getRealPath("") + b.getImageUrl();
+                                File oldImageFile = new File(oldImagePath);
+                                if (oldImageFile.exists()) {
+                                    boolean deleted = oldImageFile.delete();
+                                    if (!deleted) {
+                                        System.out.println("Could not delete old image: " + oldImagePath);
+                                        successMsg = "Delete book successfully! (Warning: Could not delete image file from server.)";
+                                    }
+                                }
+                            }
+                            request.setAttribute("successMessage", successMsg);
+
+                        } else {
+                            // deleteById trả về 0 (Sách không bị xóa dù tìm thấy)
+                            request.setAttribute("errorMessage", "Delete failed! Book ID " + id + " unexpectedly not deleted.");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        request.setAttribute("errorMessage", "Delete book failed! It may be referenced by other data");
                     }
                 }
-                bookDao.deleteById(id);
-                request.setAttribute("message", "Delete book successfully!");
 
             } catch (NumberFormatException e) {
-                request.setAttribute("message", "Error: Invalid Book ID format.");
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Error: Invalid Book ID format.");
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute("message", "Delete book failed! An error occurred: " + e.getMessage());
+                request.setAttribute("errorMessage", "Delete book failed! An unexpected system error occurred: " + e.getMessage());
             }
 
             request.getRequestDispatcher("books").forward(request, response);
@@ -69,11 +93,19 @@ public class Delete extends HttpServlet {
         if (type.equals("user")) {
             try {
                 String userName = request.getParameter("username");
-                userDao.deleteByUserName(userName);
-                request.setAttribute("message", "Delete user successfully!");
+                int rowsDeleted = userDao.deleteByUserName(userName);
+                if (rowsDeleted > 0) {
+                    request.setAttribute("successMessage", "Delete user '" + userName + "' successfully!");
+                } else {
+                    request.setAttribute("errorMessage", "Delete failed! User '" + userName + "' not found in the database.");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Delete user failed! Please check if the user exists or if there are related records.");
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute("message", "Delete user failed! Please check if the user exists or if there are related records.");
+                request.setAttribute("errorMessage", "Delete user failed! An unexpected system error occurred: " + e.getMessage());
             }
 
             request.getRequestDispatcher("users").forward(request, response);
@@ -82,13 +114,20 @@ public class Delete extends HttpServlet {
         if (type.equals("category")) {
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
-                cateogoryDao.deleteById(id);
-                request.setAttribute("message", "Delete category successfully!");
+                int rowsDeleted = cateogoryDao.deleteById(id);
+                if (rowsDeleted > 0) {
+                    request.setAttribute("successMessage", "Delete category successfully!");
+                } else {
+                    request.setAttribute("errorMessage", "Delete failed! Category ID " + id + " not found.");
+                }
             } catch (NumberFormatException e) {
-                request.setAttribute("message", "Error: Invalid Category ID format.");
+                request.setAttribute("errorMessage", "Error: Invalid Category ID format.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Delete category failed! This category may still contain books and cannot be deleted.");
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute("message", "Delete category failed! This category may still contain books.");
+                request.setAttribute("errorMessage", "Delete category failed due to an unexpected error.");
             }
 
             request.getRequestDispatcher("categories").forward(request, response);

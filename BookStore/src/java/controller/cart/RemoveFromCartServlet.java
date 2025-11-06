@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Cart;
 
-// Đặt URL mapping cho servlet
 @WebServlet(name = "RemoveFromCartServlet", urlPatterns = {"/remove-from-cart"})
 public class RemoveFromCartServlet extends HttpServlet {
 
@@ -17,36 +16,31 @@ public class RemoveFromCartServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        // 1. Lấy BookID từ trang cart.jsp
         String bookIdStr = request.getParameter("bookId");
-        
+
         if (bookIdStr != null && !bookIdStr.isEmpty()) {
             try {
                 int bookId = Integer.parseInt(bookIdStr);
 
-                // 2. Lấy giỏ hàng từ Session
+                // 1. Logic xóa (Code của bạn đã đúng)
                 HttpSession session = request.getSession();
                 Cart cart = (Cart) session.getAttribute("cart");
 
-                // 3. Kiểm tra xem giỏ hàng có tồn tại không
                 if (cart != null) {
-                    // Gọi hàm xóa item đã viết trong Cart.java
                     cart.removeItem(bookId);
-                    
-                    // Cập nhật lại giỏ hàng trong session (dù không bắt buộc
-                    // vì cart là object reference, nhưng làm cho chắc chắn)
                     session.setAttribute("cart", cart);
                 }
 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                // Xử lý nếu bookId không phải là số
             }
         }
 
-        // 4. Chuyển hướng người dùng quay LẠI trang giỏ hàng
-        // (Giả sử bạn đã chuyển cart.jsp vào thư mục /cart/)
-        response.sendRedirect("cart/cart.jsp");
+        // 2. Chuyển hướng người dùng quay LẠI trang giỏ hàng
+        // SỬA 1: Dùng contextPath.
+        // Đây là lỗi nghiêm trọng nhất gây mất session.
+        String contextPath = request.getContextPath();
+        response.sendRedirect(contextPath + "/cart/cart.jsp");
     }
 
     @Override

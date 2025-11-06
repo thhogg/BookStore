@@ -1,23 +1,39 @@
 package model;
 
-import java.sql.Date; // Hoặc java.time.LocalDateTime nếu bạn dùng Java 8+
+// 1. Thay đổi quan trọng: Dùng Timestamp thay vì Date
+// Vì DATETIME trong SQL lưu cả ngày và giờ, java.sql.Date chỉ lưu ngày.
+import java.sql.Timestamp; 
 
 public class Order {
 
     private int orderID;
-    private int userID; // Tên cột là UserID
-    private Date orderDate; // Tên cột là OrderDate
-    private int totalAmount; // Tên cột là TotalAmount
-    private String paymentMethod; // Tên cột là PaymentMethod
-    private String status; // Tên cột là Status
-    private String shippingAddress; // Tên cột là ShippingAddress
+    
+    // 2. Thay đổi: từ int userID sang String userName
+    private String userName; 
+    
+    private Timestamp orderDate; // 1. Đã đổi sang Timestamp
+    private int totalAmount;
+    private String paymentMethod;
+    private String status;
+    private String shippingAddress;
 
     public Order() {
     }
 
-    // Constructor hữu ích khi tạo đơn hàng mới
-    public Order(int userID, Date orderDate, int totalAmount, String paymentMethod, String status, String shippingAddress) {
-        this.userID = userID;
+    // Constructor để đọc từ CSDL (bao gồm cả orderID)
+    public Order(int orderID, String userName, Timestamp orderDate, int totalAmount, String paymentMethod, String status, String shippingAddress) {
+        this.orderID = orderID;
+        this.userName = userName;
+        this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
+        this.paymentMethod = paymentMethod;
+        this.status = status;
+        this.shippingAddress = shippingAddress;
+    }
+    
+    // Constructor để tạo đơn hàng mới (chưa có orderID)
+    public Order(String userName, Timestamp orderDate, int totalAmount, String paymentMethod, String status, String shippingAddress) {
+        this.userName = userName;
         this.orderDate = orderDate;
         this.totalAmount = totalAmount;
         this.paymentMethod = paymentMethod;
@@ -25,9 +41,8 @@ public class Order {
         this.shippingAddress = shippingAddress;
     }
 
-    // Thêm đầy đủ Getter và Setter cho tất cả các trường
-    // (Bấm chuột phải -> Insert Code -> Getter and Setter... trong NetBeans)
-
+    // 3. Đã cập nhật Getter và Setter
+    
     public int getOrderID() {
         return orderID;
     }
@@ -36,29 +51,19 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public int getUserID() {
-        return userID;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    // ... (Thêm getter/setter cho các trường còn lại) ...
-
-    public String getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(String shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
-
-    public Date getOrderDate() {
+    public Timestamp getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -85,4 +90,13 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+    
 }

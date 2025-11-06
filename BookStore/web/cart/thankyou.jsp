@@ -16,7 +16,7 @@
             
             <hr class="my-4">
             
-            <a href="${pageContext.request.contextPath}/test-shop.jsp" class="btn btn-primary btn-lg">
+            <a href="${pageContext.request.contextPath}/home" class="btn btn-primary btn-lg">
                 <i class="bi bi-arrow-left"></i> Quay về trang chủ
             </a>
             <a href="${pageContext.request.contextPath}/my-orders" class="btn btn-outline-secondary btn-lg">

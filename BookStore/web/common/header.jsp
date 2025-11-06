@@ -16,7 +16,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
     <!-- Logo -->
-    <a class="navbar-brand fw-bold" href="http://localhost:8080/BookStore/home">
+    <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/home">
       <i class="bi bi-book"></i> BookStore
     </a>
 
@@ -32,7 +32,7 @@
           <a class="nav-link" href="${pageContext.request.contextPath}/home">Shop</a>
         </li>
         <li class="nav-item">
-          <c:if test="${sessionScope.account != null}">
+          <c:if test="${sessionScope.acc != null}">
             <a class="nav-link" href="${pageContext.request.contextPath}/my-orders">Đơn hàng của tôi</a>
           </c:if>
         </li>
@@ -40,7 +40,7 @@
           <a class="btn btn-primary" href="${pageContext.request.contextPath}/cart/cart.jsp">
             <i class="bi bi-cart-fill"></i> Giỏ hàng
             <c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items}">
-              <span class="badge bg-danger">${sessionScope.cart.items.size()}</span>
+              <span class="badge bg-danger">${sessionScope.cart.totalQuantity}</span>
             </c:if>
           </a>
         </li>
