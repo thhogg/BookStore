@@ -22,7 +22,7 @@ public class MyOrdersServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         // 1. Kiểm tra đăng nhập
-        User account = (User) session.getAttribute("account"); // Sửa "User" thành "Account" nếu tên class của bạn là Account
+        User account = (User) session.getAttribute("acc"); 
 
         // Nếu chưa đăng nhập, đá về trang login
         if (account == null) {
@@ -32,7 +32,7 @@ public class MyOrdersServlet extends HttpServlet {
 
         try {
             // 2. Lấy UserID từ tài khoản
-            int userID = account.getUserID(); // Giả sử model User/Account có hàm getUserID()
+            int userID = account.getUserName(); // Giả sử model User/Account có hàm getUserID()
 
             // 3. Gọi DAO để lấy danh sách đơn hàng
             OrderDAO orderDAO = OrderDAO.getInstance();
