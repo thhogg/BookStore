@@ -31,18 +31,11 @@ public class EditUser extends HttpServlet {
             throws ServletException, IOException {
 
         String type = request.getParameter("type");
-        String idStr = request.getParameter("id");
+        String username = request.getParameter("username");
 
-        if (type != null && idStr != null && type.equals("edit")) {
-            int id = 0;
-            try {
-                id = Integer.parseInt(idStr);
-            } catch (NumberFormatException e) {
-                System.out.println(e);
-                request.setAttribute("message", "Invalid user ID");
-                request.getRequestDispatcher("edit-user.jsp").forward(request, response);
-            }
-            User u = userDao.getUserById(id);
+        if (type != null && username != null && type.equals("edit")) {
+            
+            User u = userDao.getUserByUserName(username);
             if (u != null) {
                 request.setAttribute("editedUser", u);
             } else {
@@ -60,7 +53,6 @@ public class EditUser extends HttpServlet {
         HttpSession session = request.getSession();
 
         String type = request.getParameter("type");
-        String idStr = request.getParameter("id");
         String userName = request.getParameter("userName");
         String pass = request.getParameter("password");
         String fullname = request.getParameter("fullname");
@@ -75,14 +67,8 @@ public class EditUser extends HttpServlet {
         }
 
         if (type != null && type.equals("edit")) {
-            int id = 0;
-            try {
-                id = Integer.parseInt(idStr);
-            } catch (NumberFormatException e) {
-                System.out.println(e);
-            }
-
-            User u = userDao.getUserById(id);
+            
+            User u = userDao.getUserByUserName(userName);
             if (u != null) {
                 u.setUserName(userName);
                 u.setPassword(pass);
@@ -91,7 +77,7 @@ public class EditUser extends HttpServlet {
                 u.setPhone(phone);
                 u.setAddress(address);
                 u.setRole(role);
-                userDao.updateUser(id, u);
+                userDao.updateUser(userName, u);
                 session.setAttribute("message", "Update user successfully!");
             } else {
                 session.setAttribute("message", "User not found for update");

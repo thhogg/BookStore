@@ -40,7 +40,6 @@
                 <form id="editUserForm" action="edituser" method="post">
 
                     <c:if test="${not empty editedUser}">
-                        <input type="hidden" name="id" value="${editedUser.userID}" />
                         <input type="hidden" name="type" value="edit" />
                     </c:if>
 
@@ -50,7 +49,7 @@
 
                     <div class="form-group">
                         <label for="userName">Username</label>
-                        <input type="text" id="userName" name="userName" value="${editedUser.userName}" required>
+                        <input type="text" id="userName" name="userName" value="${editedUser.userName}" readonly>
                     </div>
 
                     <div class="form-group">

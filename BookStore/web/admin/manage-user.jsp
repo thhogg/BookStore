@@ -75,7 +75,7 @@
                             <td>${status.index+1}</td>
                             <td>
                                 <div class="product-name">${u.fullname}</div>
-                                <div class="subtext">ID: ${u.userID}</div>
+                                <div class="subtext"></div>
                             </td>   
                             <td>${u.userName}</td>
                             <td>${u.email}</td>
@@ -84,10 +84,10 @@
                                 <fmt:formatDate value="${u.createdAt}" pattern="dd/MM/yyyy" />
                             </td>
                             <td>
-                                <a href="edituser?type=edit&id=${u.userID}" class="btn btn-edit">
+                                <a href="edituser?type=edit&username=${u.userName}" class="btn btn-edit">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
-                                <a href="delete?type=user&id=${u.userID}" class="btn btn-delete"
+                                <a href="delete?type=user&username=${u.userName}" class="btn btn-delete"
                                    data-title="${fn:escapeXml(u.userName)}" 
                                    onclick="return xacNhan(this)">
                                     <i class="fa-solid fa-trash"></i> Delete
