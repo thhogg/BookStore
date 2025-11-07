@@ -404,7 +404,7 @@ body {
 /* 4. Tùy chỉnh icon bên trong logo */
 .sidebar .logo-brand i {
     font-size: 1.4rem; /* Icon to hơn một chút */
-    color: #2563eb; /* Màu nổi bật cho icon (ví dụ: màu xanh chính) */
+    color: #1E3A8A; /* Màu nổi bật cho icon (ví dụ: màu xanh chính) */
     margin-right: -5px; /* Giảm khoảng cách cho icon, nếu cần */
 }
 .sidebar .logo-brand a:hover {
