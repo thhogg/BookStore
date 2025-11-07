@@ -38,7 +38,7 @@ public class EditCategory extends HttpServlet {
                 id = Integer.parseInt(idStr);
             } catch (NumberFormatException e) {
                 System.out.println(e);
-                request.setAttribute("errorMessage", "Invalid category ID");
+                request.setAttribute("message", "Invalid category ID");
                 request.getRequestDispatcher("edit-category.jsp").forward(request, response);
                 return;
             }
@@ -46,7 +46,7 @@ public class EditCategory extends HttpServlet {
             if (c != null) {
                 request.setAttribute("editedCategory", c);
             } else {
-                request.setAttribute("errorMessage", "Category not found for editing");
+                request.setAttribute("message", "Category not found for editing");
             }
 
         }
@@ -66,7 +66,7 @@ public class EditCategory extends HttpServlet {
 
         if (type != null && type.equals("add")) {
             categoryDao.insertCategory(categoryName, description);
-            session.setAttribute("successMessage", "Add category successfully!");
+            session.setAttribute("message", "Add category successfully!");
         }
 
         if (type != null && type.equals("edit")) {
@@ -82,9 +82,9 @@ public class EditCategory extends HttpServlet {
                 c.setCategoryName(categoryName);
                 c.setDescription(description);
                 categoryDao.updateCategory(id, c);
-                session.setAttribute("successMessage", "Update category successfully!");
+                session.setAttribute("message", "Update category successfully!");
             } else {
-                session.setAttribute("errorMessage", "Category not found for update");
+                session.setAttribute("message", "Category not found for update");
             }
 
         }

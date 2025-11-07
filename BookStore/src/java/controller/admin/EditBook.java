@@ -128,7 +128,7 @@ public class EditBook extends HttpServlet {
 
         bookDao.updateBook(bookId, b);
         HttpSession session = request.getSession();
-        session.setAttribute("successMessage", "Book updated successfully!");
+        session.setAttribute("message", "Book updated successfully!");
 
         List<Category> categories = categoryDao.getAllCategories();
         request.setAttribute("categories", categories);

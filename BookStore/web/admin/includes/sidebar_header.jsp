@@ -17,6 +17,7 @@
             <h2 class="logo-brand">
                 <a href="${pageContext.request.contextPath}/home" 
                    style="text-decoration: none; color: inherit;">
+                    <!-- Dùng icon sách để nhận diện -->
                     <i class="fa-solid fa-book-open-reader"></i> BookStore
                 </a>
             </h2>
@@ -25,7 +26,6 @@
                 <li><a href="users"><i class="fa-solid fa-users"></i> Users</a></li>
                 <li><a href="categories"><i class="fa-solid fa-layer-group"></i> Book Categories</a></li>
                 <li><a href="books"><i class="fa-solid fa-book"></i> Books</a></li>
-                <li><a href="salereport"><i class="fa-solid fa-dollar-sign"></i> Sales Report</a></li>
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/manage-orders">
                         <i class="fa-solid fa-receipt"></i> Orders
