@@ -17,11 +17,11 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="home">BookStore</a>
-                    <!-- Nút Admin bên phải logo -->
-    <a href="${pageContext.request.contextPath}/admin/dashboard" 
-       class="btn btn-dark ms-3">
-        <i class="bi bi-gear-fill"></i> Admin
-    </a>
+                <!-- Nút Admin bên phải logo -->
+                <a href="${pageContext.request.contextPath}/admin/dashboard" 
+                   class="btn btn-dark ms-3">
+                    <i class="bi bi-gear-fill"></i> Admin
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -51,9 +51,11 @@
                                 </button>
                             </div>
                         </div>
-                        <a class="btn btn-success btn-sm ml-3" href="http://localhost:8080/BookStore/cart/cart.jsp">
+                        <a class="btn btn-success btn-sm ml-3" href="${pageContext.request.contextPath}/cart/cart.jsp">
                             <i class="fa fa-shopping-cart"></i> Cart
-                            <span class="badge badge-light">3</span>
+                            <c:if test="${sessionScope.cart != null && sessionScope.cart.totalQuantity > 0}">
+                                <span class="badge bg-danger">${sessionScope.cart.totalQuantity}</span>
+                            </c:if>
                         </a>
                     </form>
                 </div>

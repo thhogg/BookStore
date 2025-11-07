@@ -16,19 +16,19 @@ import model.User;
  * @author Leo
  */
 public class UserDAO extends DBContext {
-    
+
     private static UserDAO instance;
-    
+
     private UserDAO() {
     }
-    
+
     public static synchronized UserDAO getInstance() {
         if (instance == null) {
             instance = new UserDAO();
         }
         return instance;
     }
-    
+
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
         String sql = """
@@ -61,7 +61,7 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-    
+
     public User getUserByUserName(String userName) {
         String sql = """
                      SELECT [UserName]
@@ -88,7 +88,7 @@ public class UserDAO extends DBContext {
                 u.setAddress(rs.getString("Address"));
                 u.setRole(rs.getString("Role"));
                 u.setCreatedAt(rs.getDate("CreatedAt"));
-                
+
                 return u;
             }
         } catch (SQLException e) {
@@ -96,8 +96,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    public int insertUser(String userName, String pass, String fullname, String email, String phone, String address, String role) throws SQLException {
+
+    public void insertUser(String userName, String pass, String fullname, String email, String phone, String address, String role) {
         String sql = """
                      INSERT INTO [dbo].[Users]
                                            ([UserName]
@@ -108,9 +108,10 @@ public class UserDAO extends DBContext {
                                            ,[Address]
                                            ,[Role])
                     VALUES
-                    (?,?,?,?,?,?,?)""";
-        
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+                    (?,?,?,?,?,?,?,?)""";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, userName);
             ps.setString(2, pass);
             ps.setString(3, fullname);
@@ -118,12 +119,14 @@ public class UserDAO extends DBContext {
             ps.setString(5, phone);
             ps.setString(6, address);
             ps.setString(7, role);
-            
-            return ps.executeUpdate();
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
-    
-    public int updateUser(String userName, User u) throws SQLException{
+
+    public void updateUser(String userName, User u) {
         String sql = """
                      UPDATE [dbo].[Users]
                         SET [UserName] = ?
@@ -134,7 +137,8 @@ public class UserDAO extends DBContext {
                            ,[Address] = ?
                            ,[Role] = ?
                      WHERE UserName = ?""";
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, u.getUserName());
             ps.setString(2, u.getPassword());
             ps.setString(3, u.getFullname());
@@ -143,22 +147,27 @@ public class UserDAO extends DBContext {
             ps.setString(6, u.getAddress());
             ps.setString(7, u.getRole());
             ps.setString(8, userName);
-            
-            return ps.executeUpdate();
-        } 
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
-    
-    public int deleteByUserName(String userName) throws SQLException {
+
+    public void deleteByUserName(String userName) {
         String sql = """
                      DELETE FROM [dbo].[Users]
                            WHERE UserName = ?""";
-        
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {   
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, userName);
-            return ps.executeUpdate();
-        } 
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
-    
+
     public int countAllUsers() {
 
         // SỬA SQL: Đếm UserName và thêm WHERE Role = 'Customer'
@@ -178,6 +187,7 @@ public class UserDAO extends DBContext {
         }
         return total;
     }
+
     public User checkLogin(String username, String password) {
         String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -201,7 +211,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     public boolean isUsernameExist(String username) {
         String sql = "SELECT 1 FROM Users WHERE UserName = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -214,7 +224,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
     public boolean register(String username, String password, String fullName,
             String email, String phone, String address) {
         String sql = "INSERT INTO Users (UserName, Password, FullName, Email, Phone, Address, Role) "
@@ -232,5 +242,5 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
 }

@@ -116,14 +116,17 @@ public class CategoryDAO extends DBContext {
         }
     }
 
-    public int deleteById(int id) throws SQLException {
+    public void deleteById(int id) {
         String sql = """
                      DELETE FROM [dbo].[Category]
                            WHERE CategoryID = ?""";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
-            return ps.executeUpdate();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
 }

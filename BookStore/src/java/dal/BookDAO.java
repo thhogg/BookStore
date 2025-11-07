@@ -179,14 +179,16 @@ public class BookDAO extends DBContext {
         }
     }
 
-    public int deleteById(int id) throws SQLException {
+    public void deleteById(int id) {
         String sql = """
                      DELETE FROM [dbo].[Book]
                            WHERE BookID = ?""";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
-            return ps.executeUpdate();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
 
@@ -290,7 +292,8 @@ public class BookDAO extends DBContext {
 
         return list;
     }
-     public boolean decreaseStock(int bookId, int quantity) {
+
+    public boolean decreaseStock(int bookId, int quantity) {
         // Trừ số lượng (Stock) nhưng không cho phép âm
         String sql = "UPDATE Book SET Stock = CASE "
                 + "WHEN (Stock - ?) < 0 THEN 0 "
@@ -322,6 +325,5 @@ public class BookDAO extends DBContext {
             return false;
         }
     }
-
 
 }

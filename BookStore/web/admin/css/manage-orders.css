@@ -1,0 +1,113 @@
+/* ======================================= */
+/* STYLE CHO BẢNG QUẢN LÝ          */
+/* ======================================= */
+
+/* * Sử dụng lại .form-container làm khung chính 
+ * (giống add-book.jsp) 
+ */
+.form-container {
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%; /* Đảm bảo nó chiếm đầy .main */
+    box-sizing: border-box; /* Quan trọng */
+}
+
+.form-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* Định dạng chung cho bảng */
+.table {
+    width: 100%;
+    border-collapse: collapse; /* Gộp viền */
+    margin-top: 20px;
+}
+
+/* Định dạng cho header của bảng (thead) */
+.table thead {
+    background-color: #f8f9fa; /* Màu nền sáng */
+}
+
+.table th,
+.table td {
+    padding: 12px 15px; /* Khoảng cách bên trong cell */
+    text-align: left; /* Căn trái chữ */
+    border-bottom: 1px solid #dee2e6; /* Đường kẻ ngang */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+
+.table th {
+    font-weight: 600; /* Chữ đậm cho header */
+    color: #495057;
+}
+
+/* Định dạng cho các dòng (tbody) */
+.table tbody tr:hover {
+    background-color: #f1f1f1; /* Highlight khi rê chuột */
+}
+
+/* ======================================= */
+/* STYLE CHO FORM CẬP NHẬT STATUS      */
+/* ======================================= */
+
+.update-form {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa dropdown và nút */
+    align-items: center;
+}
+
+.update-form select {
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    flex-grow: 1; /* Cho phép select co giãn */
+}
+
+/* Nút "Lưu" (dùng lại class .btn từ mystyle.css nếu có) */
+.update-form .btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.update-form .btn:hover {
+    background-color: #0056b3;
+}
+
+/* ======================================= */
+/* STYLE CHO TRẠNG THÁI (STATUS)    */
+/* ======================================= */
+
+/* Định dạng cơ bản cho "badge" trạng thái */
+.status {
+    padding: 5px 10px;
+    border-radius: 20px; /* Bo tròn */
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Dùng màu giống dashboard-card */
+.status.Pending {
+    background-color: #ffc107; /* Vàng */
+    color: #212529; /* Chữ đen cho dễ đọc */
+}
+.status.Completed {
+    background-color: #28a745; /* Xanh lá */
+}
+.status.Cancelled {
+    background-color: #dc3545; /* Đỏ */
+}
+.status.Shipped {
+    background-color: #17a2b8; /* Xanh dương (Info) */
+}
