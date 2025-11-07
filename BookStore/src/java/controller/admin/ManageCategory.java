@@ -35,16 +35,10 @@ public class ManageCategory extends HttpServlet {
         request.setAttribute("categories",categories);
         
         HttpSession session = request.getSession();
-        String successMessage = (String) session.getAttribute("successMessage");
-        if (successMessage != null) {
-            request.setAttribute("successMessage", successMessage);
-            session.removeAttribute("successMessage");
-        }
-        
-        String errorMessage = (String) session.getAttribute("errorMessage");
-        if (errorMessage != null) {
-            request.setAttribute("errorMessage", errorMessage);
-            session.removeAttribute("errorMessage");
+        String message = (String) session.getAttribute("message");
+        if (message != null) {
+            request.setAttribute("message", message);
+            session.removeAttribute("message");
         }
         
         request.getRequestDispatcher("manage-category.jsp").forward(request, response);

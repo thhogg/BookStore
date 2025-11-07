@@ -24,12 +24,8 @@
                 Home <span>/</span> Admin <span>/</span> Users <span>/</span> Add User
             </div>
 
-            <c:if test="${not empty successMessage}">
-                <div class="message success">${successMessage}</div>
-            </c:if>
-
-            <c:if test="${not empty errorMessage}">
-                <div class="message error">${errorMessage}</div>
+            <c:if test="${not empty message}">
+                <div class="success-message">${message}</div>
             </c:if>
 
             <div class="form-container">
@@ -53,9 +49,7 @@
 
                     <div class="form-group">
                         <label for="userName">Username</label>
-                        <input type="text" id="userName" name="userName" 
-                               value="${editedUser.userName}" 
-                               ${editedUser!=null?"readonly":""}>
+                        <input type="text" id="userName" name="userName" value="${editedUser.userName}" readonly>
                     </div>
 
                     <div class="form-group">

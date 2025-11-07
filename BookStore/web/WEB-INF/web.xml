@@ -33,8 +33,8 @@
         <servlet-class>controller.admin.EditCategory</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SaleReport</servlet-name>
-        <servlet-class>controller.admin.ManageSaleReport</servlet-class>
+        <servlet-name>CheckLoginServlet</servlet-name>
+        <servlet-class>homeController.CheckLoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageBook</servlet-name>
@@ -73,7 +73,7 @@
         <url-pattern>/admin/editcategory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SaleReport</servlet-name>
-        <url-pattern>/admin/salereport</url-pattern>
+        <servlet-name>CheckLoginServlet</servlet-name>
+        <url-pattern>/CheckLoginServlet</url-pattern>
     </servlet-mapping>
 </web-app>

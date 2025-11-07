@@ -77,9 +77,11 @@
                                 </button>
                             </div>
                         </div>
-                        <a class="btn btn-success btn-sm ml-3" href="show">
+                        <a class="btn btn-success btn-sm ml-3" href="${pageContext.request.contextPath}/cart/cart.jsp">
                             <i class="fa fa-shopping-cart"></i> Cart
-                            <span class="badge badge-light">3</span>
+                            <c:if test="${sessionScope.cart != null && sessionScope.cart.totalQuantity > 0}">
+                                <span class="badge bg-danger">${sessionScope.cart.totalQuantity}</span>
+                            </c:if>
                         </a>
                     </form>
                 </div>
@@ -103,7 +105,7 @@
                         <ul class="list-group category_block">
                             <c:forEach items="${listC}" var="o">
                                 <li class="list-group-item text-white ${tag == o.categoryID ? "active":""}"><a href="category?cid=${o.categoryID}">${o.categoryName}</a></li>
-                            </c:forEach>
+                                </c:forEach>
 
                         </ul>
                     </div>
@@ -153,19 +155,28 @@
                                                 <dl class="param param-inline">
                                                     <dt>Quantity: </dt>
                                                     <dd>
-                                                        <select class="form-control form-control-sm" style="width:70px;">
+                                                        <%-- SỬA 1: Thêm id="quantity-select" và name="quantity" --%>
+                                                        <select id="quantity-select" name="quantity" class="form-control form-control-sm" style="width:70px;">
                                                             <option> 1 </option>
                                                             <option> 2 </option>
                                                             <option> 3 </option>
+                                                            <option> 4 </option> <%-- Thêm 4, 5 cho đủ --%>
+                                                            <option> 5 </option>
                                                         </select>
                                                     </dd>
                                                 </dl>  <!-- item-property .// -->
                                             </div> <!-- col.// -->
-
                                         </div> <!-- row.// -->
                                         <hr>
-                                        <a href="#" class="btn btn-lg btn-primary text-uppercase"> Buy now </a>
-                                        <a href="#" class="btn btn-lg btn-outline-primary text-uppercase"> <i class="fas fa-shopping-cart"></i> Add to cart </a>
+                                        <a href="${pageContext.request.contextPath}/add-to-cart?bookId=${detail.bookID}&quantity=1&redirect=cart"
+                                           class="btn btn-lg btn-primary text-uppercase">
+                                            <i class="fas fa-shopping-cart"></i> Buy now
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/add-to-cart?bookId=${detail.bookID}" 
+                                           id="add-to-cart-link" 
+                                           class="btn btn-lg btn-outline-primary text-uppercase">
+                                            <i class="fas fa-shopping-cart"></i> Add to cart
+                                        </a>
                                     </article> <!-- card-body.// -->
                                 </aside> <!-- col.// -->
                             </div> <!-- row.// -->
@@ -230,7 +241,34 @@
                 </div>
             </div>
         </footer>
+        <script>
+            // Đợi trang tải xong
+            document.addEventListener("DOMContentLoaded", function () {
 
+                // 1. Tìm 2 thẻ của chúng ta bằng ID
+                const cartLink = document.getElementById("add-to-cart-link");
+                const quantitySelect = document.getElementById("quantity-select");
+
+                // 2. Gắn sự kiện "click" cho nút "Add to cart"
+                cartLink.addEventListener("click", function (event) {
+
+                    // 3. Ngăn không cho link chạy ngay lập tức
+                    event.preventDefault();
+
+                    // 4. Lấy số lượng (ví dụ: "3") từ ô <select>
+                    const selectedQuantity = quantitySelect.value;
+
+                    // 5. Lấy URL gốc (đã có bookId) từ chính thẻ <a>
+                    const baseUrl = this.href;
+
+                    // 6. Tạo ra URL mới đầy đủ (ví dụ: ...?bookId=1&quantity=3)
+                    const finalUrl = baseUrl + "&quantity=" + selectedQuantity;
+
+                    // 7. Chuyển hướng trình duyệt đến URL mới
+                    window.location.href = finalUrl;
+                });
+            });
+        </script>
     </body>
 </html>
 

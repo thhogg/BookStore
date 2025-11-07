@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.sql.Timestamp; // <-- Đảm bảo import đúng
 import java.util.ArrayList;
 import java.util.List;
+import model.BestSeller;
+import model.CustomerRanking; // Import model mới
 import model.Order;
 import model.OrderDetail; // Import OrderDetail
 
@@ -267,7 +269,59 @@ public class OrderDAO extends DBContext {
         return 0;
     }
 
+    /**
+     * Lấy bảng xếp hạng khách hàng (mua nhiều nhất, dựa trên đơn "Hoàn thành")
+     */
+    public List<CustomerRanking> getCustomerPurchaseRanking() {
+        List<CustomerRanking> list = new ArrayList<>();
+        String sql = "SELECT UserName, "
+                + "SUM(TotalAmount) AS TotalSpent, "
+                + "COUNT(OrderID) AS OrderCount "
+                + "FROM [Order] "
+                + "WHERE [Status] = 'Completed' "
+                + "GROUP BY UserName "
+                + "ORDER BY TotalSpent DESC"; 
 
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(new CustomerRanking(
+                        rs.getString("UserName"),
+                        rs.getLong("TotalSpent"),
+                        rs.getInt("OrderCount")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public List<BestSeller> getBestSellingBooks(int topN) {
+        List<BestSeller> list = new ArrayList<>();
+        
+        String sql = "SELECT TOP (?) b.Title, SUM(od.Quantity) AS TotalSold "
+                   + "FROM OrderDetail od "
+                   + "JOIN [Order] o ON od.OrderID = o.OrderID "
+                   + "JOIN Book b ON od.BookID = b.BookID "
+                   + "WHERE o.[Status] = 'Completed' "
+                   + "GROUP BY b.Title "
+                   + "ORDER BY TotalSold DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, topN); // Đặt tham số TOP N
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new BestSeller(
+                            rs.getString("Title"),
+                            rs.getInt("TotalSold")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 
 }

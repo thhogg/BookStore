@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
 import model.User;
 
 /**
@@ -35,12 +34,12 @@ public class EditUser extends HttpServlet {
         String username = request.getParameter("username");
 
         if (type != null && username != null && type.equals("edit")) {
-
+            
             User u = userDao.getUserByUserName(username);
             if (u != null) {
                 request.setAttribute("editedUser", u);
             } else {
-                request.setAttribute("errorMessage", "User not found for editing");
+                request.setAttribute("message", "User not found for editing");
             }
 
         }
@@ -63,29 +62,12 @@ public class EditUser extends HttpServlet {
         String role = request.getParameter("role");
 
         if (type != null && type.equals("add")) {
-            try {
-                int rowInserted = userDao.insertUser(userName, pass, fullname, email, phone, address, role);
-                if (rowInserted > 0) {
-                    session.setAttribute("successMessage", "Add user successfully! Username: " + userName);
-                } else {
-                    session.setAttribute("errorMessage", "Add user failed! Unexpectedly no rows were inserted.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                String errorMsg = "Add user failed! User already exists or database error occurred.";
-                if (e.getMessage().contains("UNIQUE KEY constraint")) {
-                    errorMsg = "Add user failed! The Username or Email you entered already exists.";
-                }
-                session.setAttribute("errorMessage", errorMsg);
-            } catch (Exception e) {
-                e.printStackTrace();
-                session.setAttribute("errorMessage", "Add user failed! An unexpected system error occurred: " + e.getMessage());
-            }
-
+            userDao.insertUser(userName, pass, fullname, email, phone, address, role);
+            session.setAttribute("message", "Add user successfully!");
         }
 
         if (type != null && type.equals("edit")) {
-
+            
             User u = userDao.getUserByUserName(userName);
             if (u != null) {
                 u.setUserName(userName);
@@ -95,20 +77,10 @@ public class EditUser extends HttpServlet {
                 u.setPhone(phone);
                 u.setAddress(address);
                 u.setRole(role);
-                try {
-                    int rowUpdated = userDao.updateUser(userName, u);
-                    if (rowUpdated > 0) {
-                        session.setAttribute("successMessage", "Update user successfully!");
-                    } else {
-                        session.setAttribute("errorMessage", "Update failed! No changes were applied.");
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    session.setAttribute("errorMessage", "Update user failed! The new username/email may already exist or a database error occurred.");
-                }
-
+                userDao.updateUser(userName, u);
+                session.setAttribute("message", "Update user successfully!");
             } else {
-                session.setAttribute("errorMessage", "Update failed! User '" + userName + "' not found.");
+                session.setAttribute("message", "User not found for update");
             }
 
         }
