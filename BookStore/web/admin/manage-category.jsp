@@ -23,9 +23,13 @@
             <div class="breadcrumb">
                 Home <span>/</span> Admin <span>/</span> Categories
             </div>
-            
-            <c:if test="${not empty message}">
-                <div class="success-message">${message}</div>
+
+            <c:if test="${not empty successMessage}">
+                <div class="message success">${successMessage}</div>
+            </c:if>
+
+            <c:if test="${not empty errorMessage}">
+                <div class="message error">${errorMessage}</div>
             </c:if>
 
             <h1>All Categories</h1>
@@ -68,7 +72,7 @@
             </table>
         </div>
         <!-- MAIN END-->
-        
+
         <script>
             function xacNhan(el) {
                 var title = el.getAttribute('data-title');
