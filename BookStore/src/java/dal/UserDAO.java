@@ -97,7 +97,7 @@ public class UserDAO extends DBContext {
         return null;
     }
     
-    public void insertUser(String userName, String pass, String fullname, String email, String phone, String address, String role) {
+    public int insertUser(String userName, String pass, String fullname, String email, String phone, String address, String role) throws SQLException {
         String sql = """
                      INSERT INTO [dbo].[Users]
                                            ([UserName]
@@ -108,10 +108,9 @@ public class UserDAO extends DBContext {
                                            ,[Address]
                                            ,[Role])
                     VALUES
-                    (?,?,?,?,?,?,?,?)""";
+                    (?,?,?,?,?,?,?)""";
         
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
             ps.setString(2, pass);
             ps.setString(3, fullname);
@@ -120,13 +119,11 @@ public class UserDAO extends DBContext {
             ps.setString(6, address);
             ps.setString(7, role);
             
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
+            return ps.executeUpdate();
         }
     }
     
-    public void updateUser(String userName, User u) {
+    public int updateUser(String userName, User u) throws SQLException{
         String sql = """
                      UPDATE [dbo].[Users]
                         SET [UserName] = ?
@@ -137,8 +134,7 @@ public class UserDAO extends DBContext {
                            ,[Address] = ?
                            ,[Role] = ?
                      WHERE UserName = ?""";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, u.getUserName());
             ps.setString(2, u.getPassword());
             ps.setString(3, u.getFullname());
@@ -148,10 +144,8 @@ public class UserDAO extends DBContext {
             ps.setString(7, u.getRole());
             ps.setString(8, userName);
             
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+            return ps.executeUpdate();
+        } 
     }
     
     public int deleteByUserName(String userName) throws SQLException {
