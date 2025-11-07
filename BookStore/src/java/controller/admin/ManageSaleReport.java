@@ -29,9 +29,16 @@ public class ManageSaleReport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String search = request.getParameter("search");
+        String sort = request.getParameter("sort");
+
         try {
-            List<SalesReport> salesReport = salesReportDao.getAllReports();
+            
+            List<SalesReport> salesReport = salesReportDao.getReports(search, sort);
             request.setAttribute("salesReport", salesReport);
+
+            request.setAttribute("search", search);
+            request.setAttribute("sort", sort);
 
         } catch (Exception e) {
             e.printStackTrace();

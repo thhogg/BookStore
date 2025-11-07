@@ -17,16 +17,16 @@ public class SalesReport {
     private String bookTitle;
     
     private int quantity;
-    private double unitPrice;
+    private int unitPrice;
     
-    private double totalAmount;
+    private int totalAmount;
     private Date orderDate;
     private String status;
 
     public SalesReport() {
     }
 
-    public SalesReport(String userName, String fullName, String bookTitle, int quantity, double unitPrice, double totalAmount, Date orderDate, String status) {
+    public SalesReport(String userName, String fullName, String bookTitle, int quantity, int unitPrice, int totalAmount, Date orderDate, String status) {
         this.userName = userName;
         this.fullName = fullName;
         this.bookTitle = bookTitle;
@@ -69,19 +69,19 @@ public class SalesReport {
         this.quantity = quantity;
     }
 
-    public double getUnitPrice() {
+    public int getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(int unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public double getTotalAmount() {
+    public int getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -100,6 +100,5 @@ public class SalesReport {
     public void setStatus(String status) {
         this.status = status;
     }
-    
     
 }
