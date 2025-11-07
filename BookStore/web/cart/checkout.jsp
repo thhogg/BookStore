@@ -8,7 +8,6 @@
 
 <h1><i class="bi bi-wallet2"></i> Thông tin Thanh toán</h1>
 
-<%-- SỬA 1: Dùng "acc" thay vì "account" --%>
 <c:if test="${sessionScope.cart == null || empty sessionScope.cart.items || sessionScope.acc == null}">
     <div class="alert alert-warning" role="alert">
         Giỏ hàng của bạn đang trống hoặc bạn chưa đăng nhập.
@@ -16,7 +15,6 @@
     </div>
 </c:if>
 
-<%-- SỬA 2: Dùng "acc" thay vì "account" --%>
 <c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items && sessionScope.acc != null}">
     
     <div class="row g-4 mt-3">
@@ -36,7 +34,6 @@
                         
                         <div class="mb-3">
                             <label for="name" class="form-label">Họ và Tên người nhận</label>
-                            <%-- SỬA 3: Dùng "acc.fullname" (vì UserDAO của bạn dùng 'fullname') --%>
                             <input type="text" id="name" name="name" class="form-control" 
                                    value="${sessionScope.acc.fullname}" required>
                         </div>
@@ -73,11 +70,7 @@
             <h4>Tóm tắt Đơn hàng</h4>
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <%-- 
-                        SỬA LỖI (Quan trọng): 
-                        Chúng ta dùng ${cart} (từ requestScope) mà CheckoutServlet đã gửi qua.
-                        Không nên dùng ${sessionScope.cart} ở đây nữa.
-                    --%>
+
                     <strong>${cart.items.size()}</strong> sản phẩm
                 </div>
                 <ul class="list-group list-group-flush">

@@ -13,19 +13,18 @@
         <link rel="stylesheet" href="css/manage-orders.css"/>
     </head>
     <body>
-
         <%@include file="includes/sidebar_header.jsp" %>
 
-        <%-- 
-            2. NỘI DUNG TRANG: (Đã chính xác)
-        --%>
         <div class="main">
-
             <div class="breadcrumb">
                 Home <span>/</span> Admin <span>/</span> Orders
             </div>
             
-            <%-- Hiển thị thông báo (Đã chính xác) --%>
+                
+            <div class="form-container"> 
+                <h2>Manage All Orders</h2>
+                
+                            <%-- Hiển thị thông báo (Đã chính xác) --%>
             <c:if test="${not empty sessionScope.successMsg}">
                 <div class="success-message">${sessionScope.successMsg}</div>
                 <c:remove var="successMsg" scope="session" />
@@ -34,12 +33,28 @@
                 <div class="error-message">${sessionScope.errorMsg}</div>
                 <c:remove var="errorMsg" scope="session" />
             </c:if>
-                
-            <%-- 
-                3. NỘI DUNG CHÍNH (Bảng đơn hàng):
-            --%>
-            <div class="form-container"> 
-                <h2>Manage All Orders</h2>
+                <!-- ======================================= -->
+                <!--        THÊM FORM SEARCH/SORT    -->
+                <!-- ======================================= -->
+                <div class="search-sort-container">
+                    <form method="GET" action="${pageContext.request.contextPath}/admin/manage-orders" >
+                        <%-- Giữ lại giá trị search cũ --%>
+                        <input type="text" name="searchKey" placeholder="Search by OrderID, Username, Status..." 
+                               value="${searchKey != null ? searchKey : ''}" />
+
+                        <select name="sortBy">
+                            <option value="id_desc" ${sortBy == 'id_desc' ? 'selected' : ''}>Sort by ID (Newest)</option>
+                            <option value="id_asc" ${sortBy == 'id_asc' ? 'selected' : ''}>Sort by ID (Oldest)</option>
+                            <option value="date_desc" ${sortBy == 'date_desc' ? 'selected' : ''}>Date (Newest)</option>
+                            <option value="date_asc" ${sortBy == 'date_asc' ? 'selected' : ''}>Date (Oldest)</option>
+                            <option value="total_desc" ${sortBy == 'total_desc' ? 'selected' : ''}>Total (High-Low)</option>
+                            <option value="total_asc" ${sortBy == 'total_asc' ? 'selected' : ''}>Total (Low-High)</option>
+                        </select>
+
+                        <button type="submit" class="add-btn"><i class="fa fa-search"></i> Search</button>
+                    </form>
+                </div>
+                <!-- ======================================= -->
                 
                 <fmt:setLocale value="vi_VN" scope="session"/>
                 <fmt:setTimeZone value="GMT+7" scope="session"/>
@@ -63,7 +78,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%-- Vòng lặp (Đã chính xác) --%>
                             <c:forEach var="order" items="${allOrders}">
                                 <tr>
                                     <td>#${order.orderID}</td>
@@ -74,7 +88,6 @@
                                         <span class="status ${order.status}">${order.status}</span>
                                     </td>
                                     <td>
-                                        <%-- Form cập nhật (Đã chính xác) --%>
                                         <form action="${pageContext.request.contextPath}/admin/update-order-status" method="POST" class="update-form">
                                             <input type="hidden" name="orderId" value="${order.orderID}">
                                             <select name="newStatus">
@@ -86,12 +99,21 @@
                                             <button type="submit" class="btn">Lưu</button>
                                         </form>
                                     </td>
+
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/admin/delete-order?orderId=${order.orderID}" 
+                                           class="btn btn-delete" 
+                                           onclick="return confirm('Bạn có chắc chắn muốn XÓA VĨNH VIỄN đơn hàng #${order.orderID} không?');">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </td>
+
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </c:if>
             </div> 
-        </div> <%-- Kết thúc <div class="main"> --%>
+        </div> 
     </body>
 </html>

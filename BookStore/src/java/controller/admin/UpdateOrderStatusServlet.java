@@ -31,7 +31,7 @@ public class UpdateOrderStatusServlet extends HttpServlet {
             OrderDAO orderDAO = OrderDAO.getInstance();
             BookDAO bookDAO = BookDAO.getInstance(); // 4. Khởi tạo BookDAO
 
-            // 5. Lấy trạng thái CŨ (rất quan trọng)
+            // 5. Lấy trạng thái CŨ 
             String oldStatus = orderDAO.getOrderStatusById(orderId);
 
             // 6. Cập nhật trạng thái mới

@@ -49,7 +49,6 @@
                             <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="đ" />
                         </td>
                         <td>
-                            <%-- Khối logic này đã RẤT TỐT --%>
                             <c:choose>
                                 <c:when test="${order.status == 'Pending'}">
                                     <span class="badge bg-warning text-dark">Chờ xử lý</span>

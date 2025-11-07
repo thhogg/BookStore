@@ -1,4 +1,4 @@
-package controller.cart;
+package controller.admin;
 
 import dal.OrderDAO;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Order;
 
-// 1. Đặt URL cho trang quản lý đơn hàng
 @WebServlet(name = "ManageOrdersServlet", urlPatterns = {"/admin/manage-orders"})
 public class ManageOrdersServlet extends HttpServlet {
 
@@ -21,15 +20,20 @@ public class ManageOrdersServlet extends HttpServlet {
         try {
             OrderDAO orderDAO = OrderDAO.getInstance();
             
-            // 2. Gọi hàm mới trong DAO để lấy TẤT CẢ đơn hàng
-            // (Bạn phải thêm hàm này vào OrderDAO.java - xem bên dưới)
-            List<Order> allOrders = orderDAO.getAllOrders();
+            // 1. Lấy tham số search và sort
+            String searchKey = request.getParameter("searchKey");
+            String sortBy = request.getParameter("sortBy");
 
-            // 3. Gửi danh sách này sang file JSP
+            // 2. Gọi hàm DAO mới (thay thế cho getAllOrders())
+            List<Order> allOrders = orderDAO.getAdminOrders(searchKey, sortBy);
+
+            // 3. Gửi danh sách và các tham số tìm kiếm/sắp xếp sang JSP
             request.setAttribute("allOrders", allOrders);
+            request.setAttribute("searchKey", searchKey);
+            request.setAttribute("sortBy", sortBy);
 
-            // 4. Chuyển tiếp (forward) đến trang JSP để hiển thị
-            request.getRequestDispatcher("manage-orders.jsp").forward(request, response);
+            // 4. Chuyển tiếp (forward) đến trang JSP (dùng / để đảm bảo đúng)
+            request.getRequestDispatcher("/admin/manage-orders.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -22,7 +22,7 @@ public class RemoveFromCartServlet extends HttpServlet {
             try {
                 int bookId = Integer.parseInt(bookIdStr);
 
-                // 1. Logic xóa (Code của bạn đã đúng)
+                // 1. Logic xóa 
                 HttpSession session = request.getSession();
                 Cart cart = (Cart) session.getAttribute("cart");
 
@@ -37,8 +37,6 @@ public class RemoveFromCartServlet extends HttpServlet {
         }
 
         // 2. Chuyển hướng người dùng quay LẠI trang giỏ hàng
-        // SỬA 1: Dùng contextPath.
-        // Đây là lỗi nghiêm trọng nhất gây mất session.
         String contextPath = request.getContextPath();
         response.sendRedirect(contextPath + "/cart/cart.jsp");
     }

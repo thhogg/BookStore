@@ -8,7 +8,7 @@
 
 <h1><i class="bi bi-cart-fill"></i> Giỏ hàng của bạn</h1>
 
-<%-- Phần kiểm tra giỏ hàng rỗng (Đã đúng) --%>
+<%-- Phần kiểm tra giỏ hàng rỗng  --%>
 <c:if test="${sessionScope.cart == null || empty sessionScope.cart.items}">
     <div class="alert alert-info mt-3">
         Giỏ hàng của bạn đang trống.
@@ -16,7 +16,7 @@
     </div>
 </c:if>
 
-<%-- Phần hiển thị giỏ hàng (Đã đúng) --%>
+<%-- Phần hiển thị giỏ hàng  --%>
 <c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items}">
     <div class="table-responsive"> <table class="table table-hover align-middle mt-3">
             <thead class="table-light">
