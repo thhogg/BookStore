@@ -1,0 +1,64 @@
+/* ===========================
+   FIX HEADER SEARCH BAR LAYOUT
+   =========================== */
+
+/* Tổng thể header của báo cáo */
+.report-header {
+    flex-wrap: wrap !important; /* Cho phép xuống dòng khi chật */
+    gap: 15px;
+}
+
+/* Tiêu đề luôn nằm trên hoặc bên trái tùy không gian */
+.report-title {
+    flex-shrink: 0;
+}
+
+/* Form tìm kiếm */
+.report-header form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Input, select, button cùng chiều cao */
+.report-header form .form-control,
+.report-header form .form-select,
+.report-header form .btn {
+    height: 40px;
+}
+
+/* Tránh bị che bởi sidebar cố định */
+.main {
+    margin-left: 250px; /* Nếu sidebar rộng 250px */
+    padding-right: 30px;
+    overflow-x: visible;
+}
+
+/* Tự co giãn khi màn hình nhỏ */
+@media (max-width: 992px) {
+    .main {
+        margin-left: 0 !important;
+    }
+
+    .report-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .report-header form {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .report-header form .form-control,
+    .report-header form .form-select {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .report-header form .btn {
+        width: 100%;
+    }
+}

@@ -50,7 +50,6 @@ public class AddToCartServlet extends HttpServlet {
                 Item newItem = new Item(book, quantity);
                 cart.addItem(newItem);
                 session.setAttribute("cart", cart);
-                // Bạn có thể giữ lại message này, nhưng nó sẽ chỉ hiển thị
                 // nếu trang "home" của bạn có code để đọc ${sessionScope.successMsg}
                 session.setAttribute("successMsg", "Đã thêm sản phẩm vào giỏ hàng!");
             }
@@ -61,9 +60,6 @@ public class AddToCartServlet extends HttpServlet {
             return;
         }
 
-        // =======================================================
-        // SỬA LỖI Ở ĐÂY
-        // =======================================================
         // 4. Chuyển hướng khi THÊM THÀNH CÔNG
         // Thay vì chuyển đến /cart/cart.jsp, chúng ta chuyển về trang trước đó
         // Lấy trang mà người dùng vừa ở (ví dụ: /home, /detail.jsp)

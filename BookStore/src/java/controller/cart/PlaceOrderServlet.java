@@ -30,9 +30,7 @@ public class PlaceOrderServlet extends HttpServlet {
 
         // 1. KIỂM TRA ĐIỀU KIỆN
         Cart cart = (Cart) session.getAttribute("cart");
-        
-        // SỬA 2: Đổi "account" thành "acc" để khớp với các servlet khác của bạn
-        User account = (User) session.getAttribute("acc"); 
+                User account = (User) session.getAttribute("acc"); 
 
         // Nếu 1 trong 2 không tồn tại, đá về trang login
         if (cart == null || cart.getItems().isEmpty() || account == null) {
@@ -51,7 +49,6 @@ public class PlaceOrderServlet extends HttpServlet {
             // 3. TẠO ĐỐI TƯỢNG 'Order'
             // Lấy ngày giờ hiện tại
             long millis = System.currentTimeMillis();
-            // SỬA 3: Dùng Timestamp để lưu cả ngày VÀ giờ (khớp với DATETIME)
             Timestamp orderDate = new Timestamp(millis); 
 
             String paymentMethod = "COD"; // Giả sử mặc định là COD
@@ -75,7 +72,6 @@ public class PlaceOrderServlet extends HttpServlet {
 
             // 5. KIỂM TRA LƯU ORDER
             if (orderId == -1) {
-                // Có lỗi xảy ra khi lưu Order
                 request.setAttribute("errorMsg", "Không thể xử lý đơn hàng của bạn. Vui lòng thử lại!");
                 request.getRequestDispatcher("cart/checkout.jsp").forward(request, response);
                 return;

@@ -179,16 +179,14 @@ public class BookDAO extends DBContext {
         }
     }
 
-    public void deleteById(int id) {
+    public int deleteById(int id) throws SQLException {
         String sql = """
                      DELETE FROM [dbo].[Book]
                            WHERE BookID = ?""";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
+            return ps.executeUpdate();
         }
     }
 
@@ -203,8 +201,6 @@ public class BookDAO extends DBContext {
                 total = rs.getInt("Total");
             }
         } catch (SQLException e) {
-            // Thay thế System.out.println(e) bằng Logging (nên dùng)
-            // hoặc ném ngoại lệ RuntimeException để Controller xử lý
             e.printStackTrace();
         }
         return total;

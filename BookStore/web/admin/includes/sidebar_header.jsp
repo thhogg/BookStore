@@ -10,6 +10,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+        <link rel="stylesheet" href="css/mystyle.css">
+        <link rel="stylesheet" href="css/manage-orders.css"/>
     </head>
     <body>
         <!-- SIDEBAR BEGIN-->
@@ -29,6 +32,13 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/manage-orders">
                         <i class="fa-solid fa-receipt"></i> Orders
+                    </a>
+                </li>
+                <!--        THÊM MỤC SALES REPORTS           -->
+                <!-- ======================================= -->
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/sales-reports">
+                        <i class="fa-solid fa-chart-line"></i> Sales Reports
                     </a>
                 </li>
                 <li><a href="#"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a></li>

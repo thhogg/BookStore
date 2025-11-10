@@ -227,21 +227,31 @@ tbody tr:hover {
     background: #b91c1c;
 }
 
-
-.success-message {
-    background-color: #d4edda;       /* Màu nền xanh nhạt */
-    color: #155724;                  /* Màu chữ xanh đậm */
-    border: 1px solid #c3e6cb;      /* Viền xanh nhạt */
-    padding: 12px 20px;              /* Khoảng cách bên trong */
-    margin-bottom: 20px;             /* Khoảng cách dưới */
-    border-radius: 5px;              /* Bo tròn góc */
-    font-weight: 600;                /* Đậm vừa phải */
-    font-size: 1rem;                 /* Cỡ chữ chuẩn */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+.message {
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Hiệu ứng mờ dần khi hiển thị */
+/* Style cho thông báo THÀNH CÔNG */
+.message.success {
+    background-color: #d4edda;       /* Màu nền xanh nhạt */
+    color: #155724;                  /* Màu chữ xanh đậm */
+    border: 1px solid #c3e6cb;       /* Viền xanh nhạt */
+}
+
+/* Style cho thông báo LỖI (ERROR) */
+.message.error {
+    background-color: #f8d7da;       /* Màu nền đỏ nhạt */
+    color: #721c24;                  /* Màu chữ đỏ đậm */
+    border: 1px solid #f5c6cb;       /* Viền đỏ nhạt */
+}
+
+/* Hiệu ứng mờ dần khi hiển thị  */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -252,7 +262,6 @@ tbody tr:hover {
         transform: translateY(0);
     }
 }
-
 
 /* Container search & sort */
 .search-sort-container {

@@ -8,7 +8,7 @@
 
 <h1><i class="bi bi-cart-fill"></i> Giỏ hàng của bạn</h1>
 
-<%-- Phần kiểm tra giỏ hàng rỗng (Đã đúng) --%>
+<%-- Phần kiểm tra giỏ hàng rỗng  --%>
 <c:if test="${sessionScope.cart == null || empty sessionScope.cart.items}">
     <div class="alert alert-info mt-3">
         Giỏ hàng của bạn đang trống.
@@ -16,7 +16,7 @@
     </div>
 </c:if>
 
-<%-- Phần hiển thị giỏ hàng (Đã đúng) --%>
+<%-- Phần hiển thị giỏ hàng  --%>
 <c:if test="${sessionScope.cart != null && not empty sessionScope.cart.items}">
     <div class="table-responsive"> <table class="table table-hover align-middle mt-3">
             <thead class="table-light">
@@ -32,7 +32,7 @@
                 <c:forEach var="item" items="${sessionScope.cart.items}">
                     <tr>
                         <td style="width: 100px;">
-                            <img src="${item.book.imageUrl}" alt="${item.book.title}" class="img-fluid rounded" style="max-height: 120px;">
+                            <img src="${pageContext.request.contextPath}/${item.book.imageUrl}" alt="${item.book.title}" class="img-fluid rounded" style="max-height: 120px;">
                         </td>
                         <td>${item.book.title}</td>
                         <td>
@@ -68,11 +68,11 @@
                         </strong>
                     </h4>
                     <hr>
-                    
+
                     <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
                     </a>
-                    
+
                     <a href="${pageContext.request.contextPath}/checkout" class="btn btn-success float-end">
                         Tiến hành Thanh toán <i class="bi bi-arrow-right"></i>
                     </a>

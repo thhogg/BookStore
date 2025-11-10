@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.BestSeller;
 import model.CustomerRanking; // Import model mới
+import model.DetailedSalesReport;
 import model.Order;
 import model.OrderDetail; // Import OrderDetail
 
@@ -143,30 +144,6 @@ public class OrderDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
-    }
-
-    /**
-     * Lấy TẤT CẢ đơn hàng để admin quản lý (sắp xếp theo ID giảm dần)
-     */
-    public List<Order> getAllOrders() {
-        List<Order> list = new ArrayList<>();
-        String sql = "SELECT * FROM [Order] ORDER BY CAST(OrderID AS INT) DESC";
-        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                list.add(new Order(
-                        rs.getInt("OrderID"),
-                        rs.getString("UserName"),
-                        rs.getTimestamp("OrderDate"), 
-                        rs.getInt("TotalAmount"),
-                        rs.getString("PaymentMethod"),
-                        rs.getString("Status"),
-                        rs.getString("ShippingAddress")
-                ));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list; 
     }
 
     /**
@@ -321,6 +298,207 @@ public class OrderDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+    // HÀM MỚI: DÙNG CHO TRANG SALES REPORTS
+    // =======================================================
+    /**
+     * Lấy TẤT CẢ các đơn hàng đã 'Completed' (Hoàn thành).
+     * Sắp xếp theo ngày mới nhất lên đầu (hợp lý cho báo cáo).
+     */
+    public List<Order> getCompletedOrders() {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM [Order] "
+                   + "WHERE [Status] = 'Completed' "
+                   + "ORDER BY OrderDate DESC";
+                   
+        try (PreparedStatement ps = connection.prepareStatement(sql); 
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                list.add(new Order(
+                        rs.getInt("OrderID"),
+                        rs.getString("UserName"),
+                        rs.getTimestamp("OrderDate"),
+                        rs.getInt("TotalAmount"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("Status"),
+                        rs.getString("ShippingAddress")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        public List<DetailedSalesReport> getDetailedSalesReport(String searchKey, String sortBy) {
+        List<DetailedSalesReport> list = new ArrayList<>();
+        
+        // 1. Câu SQL JOIN 4 bảng
+        String sql = "SELECT "
+                + "o.OrderID, o.OrderDate, o.TotalAmount AS OrderTotalAmount, o.[Status], o.UserName, "
+                + "u.FullName AS CustomerFullName, "
+                + "b.Title AS BookTitle, "
+                + "od.Quantity, od.UnitPrice "
+                + "FROM OrderDetail od "
+                + "JOIN [Order] o ON od.OrderID = o.OrderID "
+                + "JOIN Book b ON od.BookID = b.BookID "
+                + "JOIN Users u ON o.UserName = u.UserName "
+                + "WHERE o.[Status] = 'Completed' "; // Chỉ lấy đơn đã hoàn thành
+
+        List<Object> params = new ArrayList<>();
+
+        // 2. Thêm logic TÌM KIẾM
+        if (searchKey != null && !searchKey.trim().isEmpty()) {
+            sql += "AND (o.UserName LIKE ? OR u.FullName LIKE ? OR b.Title LIKE ?) ";
+            String searchPattern = "%" + searchKey.trim() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        // 3. Thêm logic SẮP XẾP (an toàn, dùng whitelist)
+        String orderBySql = "ORDER BY o.OrderDate ASC, o.OrderID ASC, b.Title ASC"; // Sắp xếp mặc định
+        
+        if ("date_desc".equals(sortBy)) {
+            orderBySql = "ORDER BY o.OrderDate DESC, o.OrderID DESC, b.Title ASC";
+        } else if ("customer_asc".equals(sortBy)) {
+            orderBySql = "ORDER BY u.FullName ASC, o.OrderDate ASC, o.OrderID ASC";
+        } else if ("book_asc".equals(sortBy)) {
+            orderBySql = "ORDER BY b.Title ASC, o.OrderDate ASC, o.OrderID ASC";
+        }
+        
+        sql += orderBySql;
+
+        // 4. Thực thi truy vấn
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán các tham số (nếu có)
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new DetailedSalesReport(
+                            rs.getInt("OrderID"),
+                            rs.getTimestamp("OrderDate"),
+                            rs.getInt("OrderTotalAmount"),
+                            rs.getString("Status"),
+                            rs.getString("UserName"),
+                            rs.getString("CustomerFullName"),
+                            rs.getString("BookTitle"),
+                            rs.getInt("Quantity"),
+                            rs.getInt("UnitPrice")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        /**
+     * Lấy TẤT CẢ đơn hàng cho trang Admin, hỗ trợ Search và Sort
+     * (Hàm này thay thế cho hàm getAllOrders() cũ)
+     * @param searchKey Từ khóa tìm kiếm (có thể là null)
+     * @param sortBy Tiêu chí sắp xếp (có thể là null)
+     * @return Danh sách đơn hàng
+     */
+    public List<Order> getAdminOrders(String searchKey, String sortBy) {
+        List<Order> list = new ArrayList<>();
+        
+        // 1. Câu SQL cơ bản (JOIN với Users để tìm kiếm theo tên)
+        String sql = "SELECT o.* FROM [Order] o "
+                   + "LEFT JOIN Users u ON o.UserName = u.UserName "
+                   + "WHERE 1=1 "; // 1=1 là mẹo để dễ nối các AND
+
+        List<Object> params = new ArrayList<>();
+
+        // 2. Thêm logic TÌM KIẾM
+        if (searchKey != null && !searchKey.trim().isEmpty()) {
+            // Tìm theo UserName, FullName (từ bảng Users), Status, hoặc OrderID
+            sql += "AND (o.UserName LIKE ? OR u.FullName LIKE ? OR o.[Status] LIKE ? OR o.OrderID = ?) ";
+            
+            String searchPattern = "%" + searchKey.trim() + "%";
+            params.add(searchPattern); // Tìm UserName
+            params.add(searchPattern); // Tìm FullName
+            params.add(searchPattern); // Tìm Status
+            
+            // Cố gắng tìm chính xác OrderID
+            int orderIdKey = -1; // Mặc định là -1 nếu không phải số
+            try {
+                orderIdKey = Integer.parseInt(searchKey.trim());
+            } catch (NumberFormatException e) { 
+                // Bỏ qua nếu searchKey không phải là số
+            }
+            params.add(orderIdKey);
+        }
+
+        // 3. THÊM LOGIC SẮP XẾP
+        String orderBySql;
+        // Dùng switch-case để xử lý các lựa chọn
+        switch (sortBy != null ? sortBy : "id_desc") { // Mặc định là id_desc
+            case "id_asc":
+                orderBySql = "ORDER BY o.OrderID ASC";
+                break;
+            case "date_desc":
+                orderBySql = "ORDER BY o.OrderDate DESC";
+                break;
+            case "date_asc":
+                orderBySql = "ORDER BY o.OrderDate ASC";
+                break;
+            case "total_desc":
+                orderBySql = "ORDER BY o.TotalAmount DESC";
+                break;
+            case "total_asc":
+                orderBySql = "ORDER BY o.TotalAmount ASC";
+                break;
+            case "id_desc":
+            default:
+                // Mặc định nếu sortBy là null hoặc không khớp
+                orderBySql = "ORDER BY o.OrderID DESC"; 
+                break;
+        }
+        
+        sql += orderBySql; // Nối logic sắp xếp vào câu SQL chính
+
+        // 4. Thực thi truy vấn
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán các tham số (cho phần TÌM KIẾM)
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Dùng constructor đầy đủ của Order
+                    list.add(new Order(
+                            rs.getInt("OrderID"),
+                            rs.getString("UserName"),
+                            rs.getTimestamp("OrderDate"),
+                            rs.getInt("TotalAmount"),
+                            rs.getString("PaymentMethod"),
+                            rs.getString("Status"),
+                            rs.getString("ShippingAddress")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        public boolean deleteOrder(int orderId) {
+        String sql = "DELETE FROM [Order] WHERE OrderID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            
+            int affectedRows = ps.executeUpdate();
+            
+            return affectedRows > 0; // Trả về true nếu có 1 hàng bị ảnh hưởng
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 

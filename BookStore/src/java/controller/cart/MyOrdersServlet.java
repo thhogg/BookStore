@@ -26,7 +26,6 @@ public class MyOrdersServlet extends HttpServlet {
         User account = (User) session.getAttribute("acc"); 
 
         if (account == null) {
-            // SỬA LẠI NHƯ SAU:
             String contextPath = request.getContextPath();
             response.sendRedirect(contextPath + "login"); // Thêm /login.jsp
             return;

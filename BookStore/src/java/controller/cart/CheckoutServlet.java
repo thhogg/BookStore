@@ -49,7 +49,6 @@ public class CheckoutServlet extends HttpServlet {
         } else {
             // 4. THÀNH CÔNG: Đã đăng nhập VÀ có giỏ hàng
             
-            // SỬA LỖI: Đẩy giỏ hàng vào requestScope
             // để file 'cart/checkout.jsp' có thể truy cập bằng ${cart}
             request.setAttribute("cart", cart); 
             
