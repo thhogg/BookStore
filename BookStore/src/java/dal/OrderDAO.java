@@ -47,7 +47,7 @@ public class OrderDAO extends DBContext {
     /**
      * Tính tổng doanh thu từ tất cả các đơn hàng (TotalAmount là INT).
      */
-    public double getTotalRevenue() {
+    public long getTotalRevenue() {
 
         String sql = "SELECT SUM(CAST(TotalAmount AS BIGINT)) AS Revenue "
                 + "FROM [dbo].[Order] "

@@ -31,15 +31,26 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Manager Account</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Welcome</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login">Login</a>
-                        </li>
+
+                        <c:if test="${sessionScope.acc != null}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="change-password">Change-password</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Welcome</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Hi ${sessionScope.acc.userName}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="logout">Logout</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.acc == null}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="login">Login</a>
+                            </li>
+                        </c:if>
                     </ul>
 
                     <form action="search" method="post" class="form-inline my-2 my-lg-0">

@@ -96,6 +96,11 @@ public class User {
     public void setCreatedAt() {
         this.createdAt = Date.valueOf(LocalDate.now());
     }
+
+    @Override
+    public String toString() {
+        return "User{" + "userName=" + userName + ", password=" + password + ", fullname=" + fullname + ", email=" + email + ", phone=" + phone + ", address=" + address + ", role=" + role + ", createdAt=" + createdAt + '}';
+    }
     
     
 }

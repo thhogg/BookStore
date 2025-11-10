@@ -8,7 +8,6 @@ import dal.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,15 +21,7 @@ import model.User;
 @WebServlet(name = "LoginControll", urlPatterns = {"/login"})
 public class LoginControll extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -40,23 +31,7 @@ public class LoginControll extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            String cuser = null, cpass = null;
-//            for (Cookie c : cookies) {
-//                if ("cuser".equals(c.getName())) {
-//                    cuser = c.getValue();
-//                }
-//                if ("cpass".equals(c.getName())) {
-//                    cpass = c.getValue();
-//                }
-//            }
-//            if (cuser != null && cpass != null) {
-//                request.setAttribute("username", cuser);
-//                request.setAttribute("password", cpass);
-//                request.setAttribute("remember", "1");
-//            }
-//        }
+
         request.getRequestDispatcher("views/login.jsp").forward(request, response);
     }
 
@@ -69,9 +44,12 @@ public class LoginControll extends HttpServlet {
         if (username == null || username.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
             request.setAttribute("message", "Vui lòng nhập đầy đủ!");
+            request.setAttribute("username", username);
             request.getRequestDispatcher("views/login.jsp").forward(request, response);
             return;
         }
+        
+        username = username.trim();
 
         User user = UserDAO.getInstance().checkLogin(username.trim(), password);
 
@@ -85,20 +63,13 @@ public class LoginControll extends HttpServlet {
         } else {
             session.setAttribute("acc", user);
             if (user.getRole().equals("Admin")) {
-                response.sendRedirect("admin/add-book.jsp");
+                response.sendRedirect("admin/dashboard.jsp");
             } else if (user.getRole().equals("Customer")) {
                 response.sendRedirect("home");
             }
         }
 
-        //  String remember = request.getParameter("remember");
-        //     if ("1".equals(remember)) {
-//            Cookie cUser = new Cookie("cuser", username);
-//            Cookie cPass = new Cookie("cpass", password);
-//            cUser.setMaxAge(7 * 24 * 60 * 60);
-//            cPass.setMaxAge(7 * 24 * 60 * 60);
-//            response.addCookie(cUser);
-//            response.addCookie(cPass);
+        
     }
 
     @Override

@@ -243,4 +243,31 @@ public class UserDAO extends DBContext {
         return false;
     }
 
+    public boolean updatePassword(String userName, String oldPasword, String newPassword) {
+        String query = "select password from users where userName = ?";
+        String updateQuery = "update users set password = ? where userName =?";
+        
+        try(PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, userName);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String currentPass = rs.getString("password");
+                // kiem tra mk cu
+                if(!currentPass.equals(oldPasword)){
+                    return false;
+                }
+                
+                //cap nhap mk moi
+                try (PreparedStatement updatePs = connection.prepareStatement(updateQuery)){
+                    updatePs.setString(1, newPassword);
+                    updatePs.setString(2, userName);
+                    return updatePs.executeUpdate() > 0;
+                    
+                } 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
